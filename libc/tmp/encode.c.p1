@@ -1,0 +1,637 @@
+"25 ./include/stdio.h
+[s S1 `*c 1 `i 1 `*c 1 `us 1 `c 1 ]
+"85
+[v _fclose `(i 0 e ]
+"86
+[v _fflush `(i 0 e ]
+"87
+[v _fgetc `(i 0 e ]
+"88
+[v _ungetc `(i 0 e ]
+"89
+[v _fputc `(i 0 e ]
+"90
+[v _getw `(i 0 e ]
+"91
+[v _putw `(i 0 e ]
+"92
+[v _gets `(*c 0 e ]
+"93
+[v _puts `(i 0 e ]
+"94
+[v _fputs `(i 0 e ]
+"95
+[v _fread `(i 0 e ]
+"96
+[v _fwrite `(i 0 e ]
+"97
+[v _fseek `(i 0 e ]
+"98
+[v _rewind `(i 0 e ]
+"99
+[v _setbuf `(i 0 e ]
+"100
+[v _printf `(i 0 e ]
+"101
+[v _fprintf `(i 0 e ]
+"102
+[v _sprintf `(i 0 e ]
+"103
+[v _scanf `(i 0 e ]
+"104
+[v _fscanf `(i 0 e ]
+"105
+[v _sscanf `(i 0 e ]
+"106
+[v _remove `(i 0 e ]
+"107
+[v _fopen `(*S1 0 e ]
+"108
+[v _freopen `(*S1 0 e ]
+"109
+[v _fdopen `(*S1 0 e ]
+"110
+[v _ftell `(l 0 e ]
+"111
+[v _fgets `(*c 0 e ]
+"112
+[v __bufallo `(*c 0 e ]
+"33 ./include/huff.h
+[s S2 `uc 1 `l 1 `*S2 1 `*S2 1 ]
+[v _node `S2 1 t ]
+"38
+[s S3 `uc 1 `uc -> / << -> 1 `i -> 8 `i -> 8 `i `x ]
+[v _h_char `S3 1 t ]
+"44
+[s S4 `uc 1 `l 1 `S3 1 ]
+[v _chent `S4 1 t ]
+"52
+[s S5 `*c 1 `l 1 `l 1 `l 1 `c 1 ]
+[v _filent `S5 1 t ]
+"59
+[s S6 `s 1 `s 1 `s 1 `l 1 ]
+[v _hdr `S6 1 t ]
+"67
+[v _get4 `(ul 0 e ]
+"68
+[v _get2 `(us 0 e ]
+"7 ./include/stdlib.h
+[v _ptrdiff_t `i 1 t ]
+"8
+[v _size_t `ui 1 t ]
+"23
+[v _atof `(d 0 e ]
+"24
+[v _atoi `(i 0 e ]
+"25
+[v _atol `(l 0 e ]
+"26
+[v _rand `(i 0 e ]
+"27
+[v _srand `(v 0 e ]
+"28
+[v _calloc `(*v 0 e ]
+"29
+[v _free `(v 0 e ]
+"30
+[v _malloc `(*v 0 e ]
+"31
+[v _realloc `(*v 0 e ]
+"32
+[v _abort `(v 0 e ]
+"33
+[v _exit `(v 0 e ]
+"34
+[v _getenv `(*c 0 e ]
+"35
+[v _system `(i 0 e ]
+"36
+[v ___qsort_compf `*(i 1 t ]
+"37
+[v _qsort `(v 0 e ]
+"38
+[v _abs `(i 0 e ]
+"39
+[v _labs `(l 0 e ]
+"7 src/encode.c
+[s S7 `*S2 1 `uc 1 ]
+[v _np `S7 1 t ]
+"9
+[v _root `*S2 1 e ]
+"10
+[v _clist `S4 -> << -> 1 `i -> 8 `i `x e ]
+"11
+[v _flist `S5 -> 500 `x e ]
+"12
+[v _alfused `s 1 e ]
+"13
+[v _cptrs `*S4 -> << -> 1 `i -> 8 `i `x e ]
+"14
+[v _nptrs `S7 -> << -> 1 `i -> 8 `i `x s ]
+"15
+[v _p_bit `uc 1 s ]
+"16
+[v _p_char `uc 1 s ]
+"17
+[v _level `uc 1 s ]
+"18
+[v _nidx `s 1 s ]
+"21
+[v _error `(v 0 e ]
+"23
+[v _make_tree `(v 0 e ]
+"24
+[v _newnode `(*S2 0 e ]
+"25
+[v _bld `(*S2 0 e ]
+"26
+[v _cmpr `(i 0 e ]
+"27
+[v _cmpnp `(i 0 e ]
+"28
+[v _bld_bits `(v 0 e ]
+"29
+[v _pinit `(v 0 e ]
+"30
+[v _align `(v 0 e ]
+"31
+[v _put_bit `(v 0 e ]
+"32
+[v _puthch `(v 0 e ]
+"33
+[v _put_tchrs `(v 0 e ]
+"34
+[v _walk_tree `(v 0 e ]
+"35
+[v _put_tree `(v 0 e ]
+"40
+[v _make_tree `(v 1 e ]
+{
+[v _namlist `**c 1 r ]
+[e :U _make_tree ]
+"41
+[v _fp `*S1 1 a ]
+"42
+[v _c `i 1 a ]
+[v _fno `i 1 a ]
+"43
+[v _tch `S3 1 a ]
+"44
+[v _cp `*c 1 A ]
+"46
+[e = _fno -> 0 `i ]
+"47
+[e $U 9 ]
+[e :U 10 ]
+"48
+[e $ ! == -> *U *U _namlist `i -> 45 `i 12 ]
+"49
+[e $U 14 ]
+"51
+[e :U 15 ]
+"52
+[e :U 16 ]
+"53
+[v _ascii `uc 0 e ]
+[e = _ascii -> 1 `uc ]
+"54
+[e ++ _namlist -> * -> 1 `i -> # `*c `i `x ]
+"55
+[e $U 9 ]
+"57
+[e :U 17 ]
+"58
+[e :U 18 ]
+"59
+[e = _ascii -> 0 `uc ]
+"60
+[e ++ _namlist -> * -> 1 `i -> # `*c `i `x ]
+"61
+[e $U 9 ]
+"63
+[e :U 19 ]
+"64
+[e $U 13 ]
+"65
+[e $U 13 ]
+[e :U 14 ]
+[\ *U + *U + _namlist * -> 0 `x -> -> # `*c `i `x * -> 1 `x -> -> # `c `i `x
+	-> 97 `c 15
+	-> 65 `c 16
+	-> 98 `c 17
+	-> 66 `c 18
+	.. 19
+]
+[e :U 13 ]
+"66
+[e :U 12 ]
+[e $ ! ! != = _fp ( _fopen , *U _namlist ? != -> _ascii `ui -> -> -> 0 `i `uc `ui : :s 1 :s 2 -> -> 0 `i `*S1 20 ]
+"67
+[v __iob `S1 0 e ]
+[e ( _fprintf , , &U *U + &U __iob * -> 2 `x -> -> # `S1 `i `x :s 3 *U ++ _namlist -> * -> 1 `i -> # `*c `i `x ]
+"68
+[e $U 9 ]
+"70
+[e :U 20 ]
+[e = . *U + &U _flist * -> _fno `x -> -> # `S5 `i `x 0 *U _namlist ]
+"71
+[e = . *U + &U _flist * -> _fno `x -> -> # `S5 `i `x 4 -> _ascii `c ]
+"72
+[e $U 21 ]
+[e :U 22 ]
+"73
+[e ++ . *U + &U _clist * -> & _c - << -> 1 `i -> 8 `i -> 1 `i `x -> -> # `S4 `i `x 1 -> -> 1 `i `l ]
+"74
+[e ++ . *U + &U _flist * -> _fno `x -> -> # `S5 `i `x 2 -> -> 1 `i `l ]
+"75
+[e :U 21 ]
+[e $ != = _c ( _fgetc _fp -U -> 1 `i 22 ]
+[e :U 23 ]
+"76
+[e ( _fclose _fp ]
+"77
+[e = _cp *U _namlist ]
+[e $U 27 ]
+[e :U 24 ]
+"78
+[e ++ . *U + &U _clist * -> & -> *U ++ _cp -> * -> 1 `i -> # `c `i `x `i - << -> 1 `i -> 8 `i -> 1 `i `x -> -> # `S4 `i `x 1 -> -> 1 `i `l ]
+[e :U 26 ]
+[e :U 27 ]
+[e $ != -> *U _cp `i -> -> -> 0 `i `c `i 24 ]
+[e :U 25 ]
+"79
+[e ++ . *U + &U _clist * -> 0 `x -> -> # `S4 `i `x 1 -> -> 1 `i `l ]
+"80
+[e ++ _namlist -> * -> 1 `i -> # `*c `i `x ]
+"81
+[e ++ _fno -> 1 `i ]
+"82
+[e :U 9 ]
+[e $ != *U _namlist -> -> 0 `i `*c 10 ]
+[e :U 11 ]
+"83
+[e = _c -> 0 `i ]
+[e $U 31 ]
+[e :U 28 ]
+"84
+[e = *U + &U _cptrs * -> _c `x -> -> # `*S4 `i `x + &U _clist -> * _c -> # `S4 `i `x ]
+"85
+[e = . *U + &U _clist * -> _c `x -> -> # `S4 `i `x 0 -> _c `uc ]
+"86
+[e :U 30 ]
+[e ++ _c -> 1 `i ]
+[e :U 31 ]
+[e $ < _c << -> 1 `i -> 8 `i 28 ]
+[e :U 29 ]
+"87
+[e ( _qsort , , , -> &U _cptrs `*v -> << -> 1 `i -> 8 `i `ui -> -> # `*S4 `i `ui -> &U _cmpr `*(i ]
+"88
+[e = _alfused -> 0 `s ]
+[e $U 35 ]
+[e :U 32 ]
+"89
+[e $U 34 ]
+[e :U 34 ]
+[e ++ _alfused -> -> 1 `i `s ]
+[e :U 35 ]
+[e $ && < -> _alfused `i << -> 1 `i -> 8 `i != . *U *U + &U _cptrs * -> _alfused `x -> -> # `*S4 `i `x 1 -> -> 0 `i `l 32 ]
+[e :U 33 ]
+"90
+[e = _level -> 0 `uc ]
+"91
+[e = _nidx -> 0 `s ]
+"92
+[e = _root ( _bld , -> 0 `s -> - -> _alfused `i -> 1 `i `s ]
+"93
+[e ( _qsort , , , -> &U _nptrs `*v -> _alfused `ui -> -> # `S7 `i `ui -> &U _cmpnp `*(i ]
+"94
+[e = _c -> 0 `i ]
+[e $U 39 ]
+[e :U 36 ]
+"95
+[e = . *U . *U + &U _nptrs * -> _c `x -> -> # `S7 `i `x 0 0 . *U *U + &U _cptrs * -> _c `x -> -> # `*S4 `i `x 0 ]
+[e :U 38 ]
+[e ++ _c -> 1 `i ]
+[e :U 39 ]
+[e $ < _c -> _alfused `i 36 ]
+[e :U 37 ]
+"96
+[e = . _tch 0 -> 0 `uc ]
+"97
+[e ( _bld_bits , _root _tch ]
+"98
+[e :U 8 ]
+}
+"103
+[v _newnode `(*S2 1 e ]
+{
+[e :U _newnode ]
+"104
+[v _np `*S2 1 A ]
+"106
+[e $ ! ! != = _np -> ( _calloc , -> 1 `ui -> -> # `S2 `i `ui `*S2 -> -> 0 `i `*S2 41 ]
+[e ( _error :s 4 ]
+"108
+[e :U 41 ]
+[e ) _np ]
+[e $U 40 ]
+"109
+[e :U 40 ]
+}
+"114
+[v _bld `(*S2 1 e ]
+{
+[v _first `s 1 r ]
+[v _last `s 1 r ]
+[e :U _bld ]
+"115
+[v _i `i 1 a ]
+"116
+[v _tot `l 1 a ]
+[v _run `l 1 a ]
+"117
+[v _l `*S2 1 A ]
+[v _np `*S2 1 A ]
+"119
+[e $ ! == -> _first `i -> _last `i 43 ]
+"120
+[e = _l ( _newnode ..  ]
+"121
+[e = . *U + &U _nptrs * -> _nidx `x -> -> # `S7 `i `x 0 _l ]
+"122
+[e = . *U + &U _nptrs * -> ++ _nidx -> -> 1 `i `s `x -> -> # `S7 `i `x 1 -> + -> _level `ui -> 1 `ui `uc ]
+"123
+[e = . *U _l 2 = . *U _l 3 -> 0 `*S2 ]
+"124
+[e ) _l ]
+[e $U 42 ]
+"126
+[e :U 43 ]
+[e ++ _level -> -> 1 `i `uc ]
+"127
+[e ; = _i -> _first `i ]
+[e $U 47 ]
+[e :U 44 ]
+"128
+[e =+ _tot . *U *U + &U _cptrs * -> _i `x -> -> # `*S4 `i `x 1 ]
+[e :U 46 ]
+[e ++ _i -> 1 `i ]
+[e :U 47 ]
+[e $ <= _i -> _last `i 44 ]
+[e :U 45 ]
+"129
+[v _factor `s 0 e ]
+[e =/ _tot -> _factor `l ]
+"130
+[e = _run . *U *U + &U _cptrs * -> = _i -> _first `i `x -> -> # `*S4 `i `x 1 ]
+"131
+[e $U 48 ]
+[e :U 49 ]
+"132
+[e =+ _run . *U *U + &U _cptrs * -> =+ _i -> 1 `i `x -> -> # `*S4 `i `x 1 ]
+[e :U 48 ]
+[e $ && < _run _tot != _i -> _last `i 49 ]
+[e :U 50 ]
+"133
+[e $ ! == _i -> _last `i 51 ]
+"134
+[e = _i / + -> _first `i -> _last `i -> 2 `i ]
+"135
+[e :U 51 ]
+[e $ ! == _i -> _first `i 52 ]
+"136
+[e = _l ( _newnode ..  ]
+"137
+[e = . *U + &U _nptrs * -> _nidx `x -> -> # `S7 `i `x 0 _l ]
+"138
+[e = . *U + &U _nptrs * -> ++ _nidx -> -> 1 `i `s `x -> -> # `S7 `i `x 1 -> + -> _level `ui -> 1 `ui `uc ]
+"139
+[e = . *U _l 2 = . *U _l 3 -> 0 `*S2 ]
+"140
+[e $U 53 ]
+[e :U 52 ]
+"141
+[e = _l ( _bld , _first -> _i `s ]
+[e :U 53 ]
+"142
+[e = _np ( _newnode ..  ]
+"143
+[e = . *U _np 2 _l ]
+"144
+[e = . *U _np 3 ( _bld , -> + _i -> 1 `i `s _last ]
+"145
+[e -- _level -> -> 1 `i `uc ]
+"146
+[e ) _np ]
+[e $U 42 ]
+"147
+[e :U 42 ]
+}
+"152
+[v _cmpr `(i 1 e ]
+{
+[v _p1 `**S4 1 R ]
+[v _p2 `**S4 1 r ]
+[e :U _cmpr ]
+"153
+[v _i `l 1 a ]
+"155
+[e = _i - . *U *U _p2 1 . *U *U _p1 1 ]
+"156
+[e $ ! > _i -> 0 `l 55 ]
+"157
+[e ) -> 1 `i ]
+[e $U 54 ]
+"158
+[e :U 55 ]
+[e $ ! < _i -> 0 `l 56 ]
+"159
+[e ) -U -> 1 `i ]
+[e $U 54 ]
+"160
+[e :U 56 ]
+[e ) -> 0 `i ]
+[e $U 54 ]
+"161
+[e :U 54 ]
+}
+"166
+[v _cmpnp `(i 1 e ]
+{
+[v _p1 `*S7 1 r ]
+[v _p2 `*S7 1 r ]
+[e :U _cmpnp ]
+"168
+[e ) -> - -> . *U _p1 1 `ui -> . *U _p2 1 `ui `i ]
+[e $U 57 ]
+"169
+[e :U 57 ]
+}
+"174
+[v _bld_bits `(v 1 e ]
+{
+[v _nodep `*S2 1 R ]
+[v _tch `S3 1 r ]
+[e :U _bld_bits ]
+"176
+[e $ ! ! != . *U _nodep 2 -> -> 0 `i `*S2 59 ]
+"177
+[e = . *U + &U _clist * -> . *U _nodep 0 `x -> -> # `S4 `i `x 2 _tch ]
+"178
+[e $U 58 ]
+"180
+[e :U 59 ]
+[e =| *U + &U . _tch 1 * -> / -> . _tch 0 `ui -> 8 `ui `x -> -> # `uc `i `x -> << -> 1 `ui % -> . _tch 0 `ui -> 8 `ui `uc ]
+"181
+[e ++ . _tch 0 -> -> 1 `i `uc ]
+"182
+[e ( _bld_bits , . *U _nodep 2 _tch ]
+"183
+[e =& *U + &U . _tch 1 * -> / - -> . _tch 0 `ui -> 1 `ui -> 8 `ui `x -> -> # `uc `i `x -> ~ << -> 1 `ui % - -> . _tch 0 `ui -> 1 `ui -> 8 `ui `uc ]
+"184
+[e ( _bld_bits , . *U _nodep 3 _tch ]
+"185
+[e :U 58 ]
+}
+"190
+[v _pinit `(v 1 e ]
+{
+[e :U _pinit ]
+"192
+[e = _p_char -> 0 `uc ]
+"193
+[e = _p_bit -> 0 `uc ]
+"194
+[e :U 60 ]
+}
+"199
+[v _align `(v 1 e ]
+{
+[e :U _align ]
+"201
+[e $ ! != -> _p_bit `ui -> -> -> 0 `i `uc `ui 62 ]
+"202
+[e ( _fputc , -> _p_char `i &U *U + &U __iob * -> 1 `x -> -> # `S1 `i `x ]
+"203
+[e :U 62 ]
+[e ( _pinit ..  ]
+"204
+[e :U 61 ]
+}
+"209
+[v _put_bit `(v 1 e ]
+{
+[v _i `i 1 r ]
+[e :U _put_bit ]
+"211
+[e $ ! != _i -> 0 `i 64 ]
+"212
+[e =| _p_char -> << -> 1 `ui -> _p_bit `ui `uc ]
+"213
+[e :U 64 ]
+[e $ ! == -> =+ _p_bit -> -> 1 `i `uc `ui -> 8 `ui 65 ]
+"214
+[e ( _fputc , -> _p_char `i &U *U + &U __iob * -> 1 `x -> -> # `S1 `i `x ]
+"215
+[e = _p_char -> 0 `uc ]
+"216
+[e = _p_bit -> 0 `uc ]
+"218
+[e :U 65 ]
+[e :U 63 ]
+}
+"223
+[v _puthch `(v 1 e ]
+{
+[v _c `uc 1 r ]
+[e :U _puthch ]
+"224
+[v _tch `S3 1 a ]
+"225
+[v _i `s 1 a ]
+"227
+[e = _tch . *U + &U _clist * -> _c `x -> -> # `S4 `i `x 2 ]
+"228
+[e = _i -> 0 `s ]
+[e $U 70 ]
+[e :U 67 ]
+"229
+[e $ ! != & -> *U + &U . _tch 1 * -> / -> _i `i -> 8 `i `x -> -> # `uc `i `x `ui -> << -> 1 `i % -> _i `i -> 8 `i `ui -> 0 `ui 71 ]
+"230
+[e =| _p_char -> << -> 1 `ui -> _p_bit `ui `uc ]
+"231
+[e :U 71 ]
+[e $ ! == -> =+ _p_bit -> -> 1 `i `uc `ui -> 8 `ui 72 ]
+"232
+[e ( _fputc , -> _p_char `i &U *U + &U __iob * -> 1 `x -> -> # `S1 `i `x ]
+"233
+[e = _p_char -> 0 `uc ]
+"234
+[e = _p_bit -> 0 `uc ]
+"236
+[e :U 72 ]
+[e :U 69 ]
+[e ++ _i -> -> 1 `i `s ]
+[e :U 70 ]
+[e $ < -> _i `ui -> . _tch 0 `ui 67 ]
+[e :U 68 ]
+"237
+[e :U 66 ]
+}
+"242
+[v _put_tchrs `(v 1 e ]
+{
+[v _tp `*S2 1 R ]
+[e :U _put_tchrs ]
+"244
+[e $ ! != . *U _tp 2 -> -> 0 `i `*S2 74 ]
+"245
+[e ( _put_tchrs . *U _tp 2 ]
+"246
+[e ( _put_tchrs . *U _tp 3 ]
+"247
+[e $U 75 ]
+[e :U 74 ]
+"248
+[e ( _fputc , -> . *U _tp 0 `i &U *U + &U __iob * -> 1 `x -> -> # `S1 `i `x ]
+[e :U 75 ]
+"249
+[e :U 73 ]
+}
+"254
+[v _walk_tree `(v 1 e ]
+{
+[v _tp `*S2 1 R ]
+[e :U _walk_tree ]
+"256
+[e $ ! != . *U _tp 2 -> -> 0 `i `*S2 77 ]
+"257
+[e ( _put_bit -> 1 `i ]
+"258
+[e ( _walk_tree . *U _tp 2 ]
+"259
+[e ( _put_bit -> 0 `i ]
+"260
+[e ( _walk_tree . *U _tp 3 ]
+"262
+[e :U 77 ]
+[e :U 76 ]
+}
+"267
+[v _put_tree `(v 1 e ]
+{
+[e :U _put_tree ]
+"269
+[e ( _put_tchrs _root ]
+"270
+[e ( _walk_tree _root ]
+"271
+[e ( _put_bit -> 0 `i ]
+"272
+[e :U 78 ]
+}
+[a 1 114 0 ]
+[a 2 114 98 0 ]
+[a 3 67 97 110 39 116 32 111 112 101 110 32 37 115 10 0 ]
+"107
+[a 4 79 117 116 32 111 102 32 109 101 109 111 114 121 0 ]

@@ -22,6 +22,7 @@ OPTIM = $(BIN_DIR)/optim
 ZAS = $(BIN_DIR)/zas
 LINK = $(BIN_DIR)/link
 LIBR = $(BIN_DIR)/libr
+OBJTOHEX = $(BIN_DIR)/objtohex
 
 # Ensure directories exist
 DIRS = $(OBJ_DIR) $(LIB_DIR) $(BIN_DIR) $(TMP_DIR)
@@ -30,13 +31,14 @@ $(DIRS):
 
 # Build tools
 build-tools: $(DIRS)
-	@[ -f $(CPP) ] || $(MAKE) -C ../cpp && cp ../cpp/bin/cpp $(BIN_DIR)/
-	@[ -f $(P1) ] || $(MAKE) -C ../p1 && cp ../p1/bin/p1 $(BIN_DIR)/
-	@[ -f $(CGEN) ] || $(MAKE) -C ../cgen && cp ../cgen/bin/cgen $(BIN_DIR)/
-	@[ -f $(OPTIM) ] || $(MAKE) -C ../optim && cp ../optim/optim $(BIN_DIR)/
-	@[ -f $(ZAS) ] || $(MAKE) -C ../zas && cp ../zas/zas $(BIN_DIR)/
-	@[ -f $(LINK) ] || $(MAKE) -C ../link && cp ../link/link $(BIN_DIR)/
-	@[ -f $(LIBR) ] || $(MAKE) -C ../libr && cp ../libr/libr $(BIN_DIR)/
+	@[ -f $(CPP) ] || $(MAKE) -C ../cpp && echo "BIN_DIR is: $(BIN_DIR)" && cp ../cpp/bin/cpp $(BIN_DIR)/ 
+	@[ -f $(P1) ] || $(MAKE) -C ../p1 && cp ../p1/bin/p1 $(BIN_DIR)/ 
+	@[ -f $(CGEN) ] || $(MAKE) -C ../cgen && cp ../cgen/bin/cgen $(BIN_DIR)/ 
+	@[ -f $(OPTIM) ] || $(MAKE) -C ../optim && cp ../optim/optim $(BIN_DIR)/ 
+	@[ -f $(ZAS) ] || $(MAKE) -C ../zas && cp ../zas/zas $(BIN_DIR)/ 
+	@[ -f $(LINK) ] || $(MAKE) -C ../link && cp ../link/link $(BIN_DIR)/ 
+	@[ -f $(LIBR) ] || $(MAKE) -C ../libr && cp ../libr/libr $(BIN_DIR)/ 
+	@[ -f $(OBJTOHEX) ] || $(MAKE) -C ../objtohex && cp ../objtohex/objtohex $(BIN_DIR)/ 
 
 # Compilation function for C files
 define compile_c
@@ -105,11 +107,19 @@ ltof.obj float.obj \
 
 # List of object files for libovr.lib
 OVROBJS = $(patsubst %,$(OBJ_DIR)/%, ovrload.obj ovrbgn.obj)
+CRTOBJS = $(patsubst %,$(OBJ_DIR)/%, crtcpm.obj wcr.obj)
+ZCRTOBJS = $(patsubst %,$(OBJ_DIR)/%, zcrtcpm.obj zrrtcpm.obj)
+# TOOLSOBJS = $(patsubst %,$(OBJ_DIR)/%, ec.obj symtoas.obj exec.obj enhuff.obj encode.obj hmisc.obj dehuff.obj decode.obj)
+TOOLSOBJS = $(patsubst %,$(OBJ_DIR)/%, ec.obj symtoas.obj exec.obj enhuff.obj  hmisc.obj dehuff.obj decode.obj)
+
+LIBS = $(patsubst %,$(LIB_DIR)/%, libc.lib libovr.lib libf.lib)
+# TOOLS = $(patsubst %,$(BIN_DIR)/%, c.com symtoas.com enhuff.com dehuff.com)
+TOOLS = $(patsubst %,$(BIN_DIR)/%, symtoas.com c.com)
+
 
 # Build libraries
 $(LIB_DIR)/libc.lib: $(COBJS) | $(DIRS)
 	$(info Building libc.lib)
-
 	$(LIBR) r $@ $(COBJS)
 
 $(LIB_DIR)/libf.lib: $(FOBJS) | $(DIRS)
@@ -141,13 +151,40 @@ $(OBJ_DIR)/rrtcpm.obj: $(OBJ_DIR)/zrrtcpm.obj | $(DIRS)
 	$(info Copying $< to $@)
 	cp $< $@
 
+# Executable files
+$(BIN_DIR)/exec.com: $(OBJ_DIR)/exec.obj | $(DIRS) build-tools
+	$(info Creating exec.com directly using link tool)
+	$(LINK) -c100h -o$(BIN_DIR)/exec.com $(OBJ_DIR)/exec.obj
+
+$(OBJ_DIR)/ec.obj: $(SRC_DIR)/ec.c
+	$(info Creating ec.obj)
+	cat $(SRC_DIR)/ec.c|sed -e 's|@@TAG@@|$(TAG)|' > $(TMP_DIR)/c.c
+	$(call compile_c,$(TMP_DIR)/c.c,$(OBJ_DIR)/ec.obj)
+	rm -f $(TMP_DIR)/c.c
+
+$(BIN_DIR)/c.com: $(OBJ_DIR)/ec.obj $(LIBS) $(CRTOBJS) $(BIN_DIR)/exec.com | $(DIRS) build-tools
+	$(info Creating c.com)
+	$(LINK) -z -Ptext=0,data,bss -C100h -o$(BIN_DIR)/c.com $(OBJ_DIR)/crtcpm.obj $(OBJ_DIR)/ec.obj $(LIB_DIR)/libc.lib
+
+$(BIN_DIR)/symtoas.com: $(OBJ_DIR)/symtoas.obj $(LIBS) $(CRTOBJS) $(BIN_DIR)/c.com | $(DIRS) build-tools
+	$(info Creating symtoas.com)
+	$(LINK) -o$(BIN_DIR)/symtoas.com $(OBJ_DIR)/symtoas.obj $(CRTOBJS) $(LIBS)
+
+$(BIN_DIR)/enhuff.com: $(OBJ_DIR)/enhuff.obj $(OBJ_DIR)/encode.obj $(OBJ_DIR)/hmisc.obj $(LIBS) $(CRTOBJS) $(BIN_DIR)/c.com | $(DIRS) build-tools
+	$(info Creating enhuff.com)
+	$(LINK) -o$(BIN_DIR)/enhuff.com $(OBJ_DIR)/enhuff.obj $(OBJ_DIR)/encode.obj $(OBJ_DIR)/hmisc.obj $(LIBS) $(CRTOBJS)
+
+$(BIN_DIR)/dehuff.com: $(OBJ_DIR)/dehuff.obj $(OBJ_DIR)/decode.obj $(OBJ_DIR)/hmisc.obj $(LIBS) $(CRTOBJS) $(BIN_DIR)/c.com | $(DIRS) build-tools
+	$(info Creating dehuff.com)
+	$(LINK) -o$(BIN_DIR)/dehuff.com $(OBJ_DIR)/dehuff.obj $(OBJ_DIR)/decode.obj $(OBJ_DIR)/hmisc.obj $(LIBS) $(CRTOBJS)
+
 # Main target
-all: build-tools $(LIB_DIR)/libc.lib $(LIB_DIR)/libf.lib $(LIB_DIR)/libovr.lib $(OBJ_DIR)/crtcpm.obj $(OBJ_DIR)/rrtcpm.obj $(OBJ_DIR)/wcr.obj
+all: build-tools $(LIBS) $(CRTOBJS) $(TOOLSOBJS) $(TOOLS) $(BIN_DIR)/exec.com
 
 # Clean targets
 clean:
 	$(info Cleaning object and temporary files)
-	rm -rf $(OBJ_DIR)/*.obj $(TMP_DIR)/*
+	rm -rf $(OBJ_DIR)/*.obj $(TMP_DIR)/* $(BIN_DIR)/*
 
 distclean: clean
 	$(info Cleaning binary files)

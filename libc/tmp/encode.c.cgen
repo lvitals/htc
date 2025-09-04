@@ -1,0 +1,375 @@
+psect	text
+global	_make_tree
+_make_tree:
+global	ncsv, cret, indir
+call	ncsv
+defw	f71
+ld	(ix+-6),.low.0
+ld	(ix+1+-6),.high.0
+jp	l9
+l10:
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+ld	a,(hl)
+inc	hl
+ld	h,(hl)
+ld	l,a
+ld	a,(hl)
+cp	.low.45
+jp	nz,l12
+jp	l14
+l15:
+l16:
+global	_ascii
+ld	a,.low.1
+ld	(_ascii),a
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+inc	hl
+inc hl
+ld	(ix+6),l
+ld	(ix+1+6),h
+jp	l9
+l17:
+l18:
+ld	a,.low.0
+ld	(_ascii),a
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+inc	hl
+inc hl
+ld	(ix+6),l
+ld	(ix+1+6),h
+jp	l9
+l19:
+jp	l13
+jp	l13
+l14:
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+ld	a,(hl)
+inc	hl
+ld	h,(hl)
+ld	l,a
+inc	hl
+ld	a,(hl)
+cp	65
+jp	z,l16
+cp	66
+jp	z,l18
+cp	97
+jp	z,l15
+cp	98
+jp	z,l17
+jp	l19
+l13:
+l12:
+global	_fopen
+ld	a,(_ascii)
+or	a
+jp	lnz,20f
+jp	21f
+21:
+ld	hl,29f
+jp	22f
+20:
+ld	hl,19f
+22:
+push	hl
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+ld	c,(hl)
+inc	hl
+ld	b,(hl)
+push	bc
+call	_fopen
+exx
+ld	hl,2+2
+add	hl,sp
+ld	sp,hl
+exx
+ld	l,l
+ld	h,h
+ld	(ix+-2),l
+ld	(ix+1+-2),h
+ld	a,l
+or	h
+jp	nz,l20
+global	_fprintf
+global	__iob
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+ld	c,(hl)
+inc	hl
+ld	b,(hl)
+dec	hl
+inc	hl
+inc hl
+ld	(ix+6),l
+ld	(ix+1+6),h
+push	bc
+ld	hl,39f
+push	hl
+ld	hl,__iob+18
+push	hl
+call	_fprintf
+ld	hl,2+2+2
+add	hl,sp
+ld	sp,hl
+jp	l9
+l20:
+global	_flist
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+ld	c,(hl)
+inc	hl
+ld	b,(hl)
+push	bc
+ld	de,15
+ld	l,(ix+-6)
+ld	h,(ix+1+-6)
+global	amul
+call	amul
+ld	de,_flist
+add	hl,de
+pop	bc
+ld	(hl),c
+inc	hl
+ld	(hl),b
+ld	de,15
+ld	l,(ix+-6)
+ld	h,(ix+1+-6)
+global	amul
+call	amul
+ld	de,_flist+14
+add	hl,de
+ld	a,(_ascii)
+ld	(hl),a
+jp	l21
+l22:
+global	_clist
+ld	de,1
+ld	hl,0
+push	hl
+push	de
+ld	de,38
+ld	a,(ix+-4)
+and	.low.255
+ld	l,a
+ld	a,(ix+1+-4)
+and	.low.0
+ld	h,a
+global	amul
+call	amul
+ld	de,_clist+1
+add	hl,de
+global	asaladd
+call	asaladd
+ld	de,1
+ld	hl,0
+push	hl
+push	de
+ld	de,15
+ld	l,(ix+-6)
+ld	h,(ix+1+-6)
+global	amul
+call	amul
+ld	de,_flist+6
+add	hl,de
+global	asaladd
+call	asaladd
+l21:
+global	_fgetc
+ld	l,(ix+-2)
+ld	h,(ix+1+-2)
+push	hl
+call	_fgetc
+exx
+ld	hl,2
+add	hl,sp
+ld	sp,hl
+exx
+ld	l,l
+ld	h,h
+ld	(ix+-4),l
+ld	(ix+1+-4),h
+ld	de,-1
+or	a
+sbc	hl,de
+jp	nz,l22
+l23:
+global	_fclose
+ld	l,(ix+-2)
+ld	h,(ix+1+-2)
+push	hl
+call	_fclose
+ld	hl,2
+add	hl,sp
+ld	sp,hl
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+ld	c,(hl)
+inc	hl
+ld	b,(hl)
+push	bc
+pop	iy
+jp	l27
+l24:
+ld	de,1
+ld	hl,0
+push	hl
+push	de
+ld	de,38
+ld	a,(iy+0)
+ld	l,a
+rla
+sbc	a,a
+ld	h,a
+ld	a,l
+and	.low.255
+ld	l,a
+ld	a,h
+and	.low.0
+ld	h,a
+global	amul
+call	amul
+ld	de,_clist+1
+add	hl,de
+global	asaladd
+call	asaladd
+inc	iy
+l26:
+l27:
+ld	a,(iy+0)
+or	a
+jp	anz,l24
+l25:
+ld	de,1
+ld	hl,0
+push	hl
+push	de
+ld	hl,_clist+1
+global	asaladd
+call	asaladd
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+inc	hl
+inc hl
+ld	(ix+6),l
+ld	(ix+1+6),h
+ld	l,(ix+-6)
+ld	h,(ix+1+-6)
+inc	hl
+ld	(ix+-6),l
+ld	(ix+1+-6),h
+l9:
+ld	l,(ix+6)
+ld	h,(ix+1+6)
+ld	a,(hl)
+inc	hl
+or	(hl)
+jp	nz,l10
+l11:
+ld	(ix+-4),.low.0
+ld	(ix+1+-4),.high.0
+jp	l31
+l28:
+global	_cptrs
+ld	de,38
+ld	l,(ix+-4)
+ld	h,(ix+1+-4)
+global	amul
+call	amul
+ld	de,_clist
+add	hl,de
+ex	de,hl
+push	de
+ld	de,_cptrs
+ld	l,(ix+-4)
+ld	h,(ix+1+-4)
+add	hl,hl
+add	hl,de
+pop	de
+ld	(hl),e
+inc	hl
+ld	(hl),d
+ld	de,38
+ld	l,(ix+-4)
+ld	h,(ix+1+-4)
+global	amul
+call	amul
+ld	de,_clist
+add	hl,de
+ld	a,(ix+-4)
+ld	(hl),a
+l30:
+ld	l,(ix+-4)
+ld	h,(ix+1+-4)
+inc	hl
+ld	(ix+-4),l
+ld	(ix+1+-4),h
+l31:
+ld	de,256
+ld	l,(ix+-4)
+ld	h,(ix+1+-4)
+global	wrelop
+call	wrelop
+jp	alt,l28
+l29:
+global	_qsort
+global	_cmpr
+ld	hl,_cmpr
+push	hl
+ld	hl,2
+push	hl
+ld	hl,256
+push	hl
+ld	hl,_cptrs
+push	hl
+call	_qsort
+ld	hl,2+2+2+2
+add	hl,sp
+ld	sp,hl
+global	_alfused
+ld	hl,0
+ld	(_alfused),hl
+jp	l35
+l32:
+jp	l34
+l34:
+ld	hl,(_alfused)
+inc	hl
+ld	(_alfused),hl
+l35:
+ld	de,256
+ld	hl,(_alfused)
+global	wrelop
+call	wrelop
+jp	alt,20f
+jp	21f
+20:
+ld	de,_cptrs
+ld	hl,(_alfused)
+add	hl,hl
+add	hl,de
+ld	a,(hl)
+inc	hl
+ld	h,(hl)
+ld	l,a
+inc	hl
+ld	e,(hl)
+inc	hl
+ld	d,(hl)
+inc	hl
+ld	a,(hl)
+inc	hl
+ld	h,(hl)
+ld	l,a
+ld	a,e
+or	d
+or	l
+or	h
+jp	nz,20f
+jp	21f
+21:jp	11f
+20:jp	10f
