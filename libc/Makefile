@@ -103,14 +103,22 @@ frexp.obj fabs.obj ceil.obj floor.obj finc.obj asfloat.obj frndint.obj ftol.obj 
 ltof.obj float.obj \
 )
 
+# List of object files for libovr.lib
+OVROBJS = $(patsubst %,$(OBJ_DIR)/%, ovrload.obj ovrbgn.obj)
+
 # Build libraries
 $(LIB_DIR)/libc.lib: $(COBJS) | $(DIRS)
 	$(info Building libc.lib)
+
 	$(LIBR) r $@ $(COBJS)
 
 $(LIB_DIR)/libf.lib: $(FOBJS) | $(DIRS)
 	$(info Building libf.lib)
 	$(LIBR) r $@ $(FOBJS)
+
+$(LIB_DIR)/libovr.lib: $(OVROBJS) | $(DIRS)
+	$(info Building libovr.lib)
+	$(LIBR) r $@ $(OVROBJS)
 
 # CRT objects
 $(OBJ_DIR)/zcrtcpm.obj: $(ARCH_DIR)/zcrtcpm.as | $(DIRS)
@@ -130,7 +138,7 @@ $(OBJ_DIR)/rrtcpm.obj: $(OBJ_DIR)/zrrtcpm.obj | $(DIRS)
 	cp $< $@
 
 # Main target
-all: build-tools $(LIB_DIR)/libc.lib $(LIB_DIR)/libf.lib $(OBJ_DIR)/crtcpm.obj $(OBJ_DIR)/rrtcpm.obj
+all: build-tools $(LIB_DIR)/libc.lib $(LIB_DIR)/libf.lib $(LIB_DIR)/libovr.lib $(OBJ_DIR)/crtcpm.obj $(OBJ_DIR)/rrtcpm.obj
 
 # Clean targets
 clean:
