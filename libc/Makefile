@@ -125,6 +125,10 @@ $(OBJ_DIR)/zcrtcpm.obj: $(ARCH_DIR)/zcrtcpm.as | $(DIRS)
 	$(info Assembling $< to $@)
 	$(ZAS) $(ASFLAGS) $< -o $@
 
+$(OBJ_DIR)/wcr.obj: $(ARCH_DIR)/wcr.as | $(DIRS)
+	$(info Assembling $< to $@)
+	$(ZAS) $(ASFLAGS) $< -o $@
+
 $(OBJ_DIR)/zrrtcpm.obj: $(ARCH_DIR)/zrrtcpm.as | $(DIRS)
 	$(info Assembling $< to $@)
 	$(ZAS) $(ASFLAGS) $< -o $@
@@ -138,7 +142,7 @@ $(OBJ_DIR)/rrtcpm.obj: $(OBJ_DIR)/zrrtcpm.obj | $(DIRS)
 	cp $< $@
 
 # Main target
-all: build-tools $(LIB_DIR)/libc.lib $(LIB_DIR)/libf.lib $(LIB_DIR)/libovr.lib $(OBJ_DIR)/crtcpm.obj $(OBJ_DIR)/rrtcpm.obj
+all: build-tools $(LIB_DIR)/libc.lib $(LIB_DIR)/libf.lib $(LIB_DIR)/libovr.lib $(OBJ_DIR)/crtcpm.obj $(OBJ_DIR)/rrtcpm.obj $(OBJ_DIR)/wcr.obj
 
 # Clean targets
 clean:
