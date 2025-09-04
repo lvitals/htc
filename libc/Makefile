@@ -110,11 +110,11 @@ OVROBJS = $(patsubst %,$(OBJ_DIR)/%, ovrload.obj ovrbgn.obj)
 CRTOBJS = $(patsubst %,$(OBJ_DIR)/%, crtcpm.obj wcr.obj)
 ZCRTOBJS = $(patsubst %,$(OBJ_DIR)/%, zcrtcpm.obj zrrtcpm.obj)
 # TOOLSOBJS = $(patsubst %,$(OBJ_DIR)/%, ec.obj symtoas.obj exec.obj enhuff.obj encode.obj hmisc.obj dehuff.obj decode.obj)
-TOOLSOBJS = $(patsubst %,$(OBJ_DIR)/%, ec.obj symtoas.obj exec.obj enhuff.obj  hmisc.obj dehuff.obj decode.obj)
+TOOLSOBJS = $(patsubst %,$(OBJ_DIR)/%, ec.obj symtoas.obj exec.obj enhuff.obj  hmisc.obj dehuff.obj decode.obj encode.obj)
 
 LIBS = $(patsubst %,$(LIB_DIR)/%, libc.lib libovr.lib libf.lib)
-# TOOLS = $(patsubst %,$(BIN_DIR)/%, c.com symtoas.com enhuff.com dehuff.com)
-TOOLS = $(patsubst %,$(BIN_DIR)/%, symtoas.com c.com)
+TOOLS = $(patsubst %,$(BIN_DIR)/%, c.com symtoas.com enhuff.com dehuff.com)
+# TOOLS = $(patsubst %,$(BIN_DIR)/%, symtoas.com c.com)
 
 
 # Build libraries

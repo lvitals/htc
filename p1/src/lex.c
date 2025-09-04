@@ -70,7 +70,7 @@ sym_t *sigptr;
 uint8_t yylex(void) {
     int16_t ch;
     uint8_t tok;
-    char buf[50];
+    char buf[256];
     register char *s;
 
     if (ungetTok) {
