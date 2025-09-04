@@ -1,0 +1,1400 @@
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   1
+
+
+   1                            global	_main
+   2                            global	ncsv, cret, indir
+   3                            global	_printf
+   4                            global	_demonstrate_variables_and_types
+   5                            global	_demonstrate_operators
+   6                            global	_demonstrate_control_flow
+   7                            global	_demonstrate_functions_and_point
+   8                            global	_demonstrate_arrays_and_strings
+   9                            global	_demonstrate_structs_unions_enum
+  10                            global	_demonstrate_file_io
+  11    0000'                   psect	text
+  12    0000'                   _main:
+  13    0000' 21 000C'          ld	hl,19f
+  14    0003' E5                push	hl
+  15    0004' CD 0000*          call	_printf
+  16    0007' 21 003F'          ld	hl,29f
+  17    000A' E3                ex	(sp),hl
+  18    000B' CD 0000*          call	_printf
+  19    000E' 21 006B'          ld	hl,39f
+  20    0011' E3                ex	(sp),hl
+  21    0012' CD 0000*          call	_printf
+  22    0015' C1                pop	bc
+  23    0016' CD 0037'          call	_demonstrate_variables_and_types
+  24    0019' CD 0138'          call	_demonstrate_operators
+  25    001C' CD 0264'          call	_demonstrate_control_flow
+  26    001F' CD 03C1'          call	_demonstrate_functions_and_point
+  27    0022' CD 0436'          call	_demonstrate_arrays_and_strings
+  28    0025' CD 04E5'          call	_demonstrate_structs_unions_enum
+  29    0028' CD 053C'          call	_demonstrate_file_io
+  30    002B' 21 009E'          ld	hl,49f
+  31    002E' E5                push	hl
+  32    002F' CD 0000*          call	_printf
+  33    0032' C1                pop	bc
+  34    0033' 21 0000           ld	hl,0
+  35    0036' C9                ret	
+  36    0000'                   psect	data
+  37    0000'                   e77:
+  38    0000' C3 F5 C8 42       deff	3.14
+  39    0004'                   e78:
+  40    0004' 4D F8 AD 42       deff	2.71828
+  41    0008'                   e79:
+  42    0008' D0 0F C9 42       deff	3.14159
+  43    0037'                   psect	text
+  44    0037'                   _demonstrate_variables_and_types:
+  45    0037' CD 0000*          call ncsv
+  46    003A' FFEF              defw -17
+  47    003C' DD 36 FE 2A       ld	(ix+-2),42
+  48    0040' DD 36 FF 00       ld	(ix+-1),0
+  49    0044' ED 5B 0000'       ld	de,(e77)
+  50    0048' 2A 0002'          ld	hl,(e77+2)
+  51    004B' DD 73 FA          ld	(ix+-6),e
+  52    004E' DD 72 FB          ld	(ix+-5),d
+  53    0051' DD 75 FC          ld	(ix+-4),l
+  54    0054' DD 74 FD          ld	(ix+-3),h
+  55    0057' ED 5B 0004'       ld	de,(e78)
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   2
+
+
+  56    005B' 2A 0006'          ld	hl,(e78+2)
+  57    005E' DD 73 F6          ld	(ix+-10),e
+  58    0061' DD 72 F7          ld	(ix+-9),d
+  59    0064' DD 75 F8          ld	(ix+-8),l
+  60    0067' DD 74 F9          ld	(ix+-7),h
+  61    006A' DD 36 F5 43       ld	(ix+-11),67
+  62    006E' DD 36 F3 01       ld	(ix+-13),1
+  63    0072' DD 36 F4 00       ld	(ix+-12),0
+  64    0076' ED 5B 0008'       ld	de,(e79)
+  65    007A' 2A 000A'          ld	hl,(e79+2)
+  66    007D' DD 73 EF          ld	(ix+-17),e
+  67    0080' DD 72 F0          ld	(ix+-16),d
+  68    0083' DD 75 F1          ld	(ix+-15),l
+  69    0086' DD 74 F2          ld	(ix+-14),h
+  70    0089' 21 00C4'          ld	hl,59f
+  71    008C' E5                push	hl
+  72    008D' CD 0000*          call	_printf
+  73    0090' 11 0002           ld	de,2
+  74    0093' 21 0000           ld	hl,0
+  75    0096' E3                ex	(sp),hl
+  76    0097' D5                push	de
+  77    0098' DD 6E FE          ld	l,(ix+-2)
+  78    009B' DD 66 FF          ld	h,(ix+-1)
+  79    009E' E5                push	hl
+  80    009F' 21 00EC'          ld	hl,69f
+  81    00A2' E5                push	hl
+  82    00A3' CD 0000*          call	_printf
+  83    00A6' C1                pop	bc
+  84    00A7' C1                pop	bc
+  85    00A8' C1                pop	bc
+  86    00A9' 11 0004           ld	de,4
+  87    00AC' 21 0000           ld	hl,0
+  88    00AF' E3                ex	(sp),hl
+  89    00B0' D5                push	de
+  90    00B1' DD 5E FA          ld	e,(ix+-6)
+  91    00B4' DD 56 FB          ld	d,(ix+-5)
+  92    00B7' DD 6E FC          ld	l,(ix+-4)
+  93    00BA' DD 66 FD          ld	h,(ix+-3)
+  94    00BD' E5                push	hl
+  95    00BE' D5                push	de
+  96    00BF' 21 010E'          ld	hl,79f
+  97    00C2' E5                push	hl
+  98    00C3' CD 0000*          call	_printf
+  99    00C6' 21 000A           ld	hl,10
+ 100    00C9' 39                add	hl,sp
+ 101    00CA' F9                ld	sp,hl
+ 102    00CB' 11 0004           ld	de,4
+ 103    00CE' 21 0000           ld	hl,0
+ 104    00D1' E5                push	hl
+ 105    00D2' D5                push	de
+ 106    00D3' DD 5E F6          ld	e,(ix+-10)
+ 107    00D6' DD 56 F7          ld	d,(ix+-9)
+ 108    00D9' DD 6E F8          ld	l,(ix+-8)
+ 109    00DC' DD 66 F9          ld	h,(ix+-7)
+ 110    00DF' E5                push	hl
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   3
+
+
+ 111    00E0' D5                push	de
+ 112    00E1' 21 0130'          ld	hl,89f
+ 113    00E4' E5                push	hl
+ 114    00E5' CD 0000*          call	_printf
+ 115    00E8' 21 000A           ld	hl,10
+ 116    00EB' 39                add	hl,sp
+ 117    00EC' F9                ld	sp,hl
+ 118    00ED' 11 0001           ld	de,1
+ 119    00F0' 21 0000           ld	hl,0
+ 120    00F3' E5                push	hl
+ 121    00F4' D5                push	de
+ 122    00F5' DD 7E F5          ld	a,(ix+-11)
+ 123    00F8' 6F                ld	l,a
+ 124    00F9' 17                rla
+ 125    00FA' 9F                sbc	a,a
+ 126    00FB' 67                ld	h,a
+ 127    00FC' E5                push	hl
+ 128    00FD' 21 0152'          ld	hl,99f
+ 129    0100' E5                push	hl
+ 130    0101' CD 0000*          call	_printf
+ 131    0104' C1                pop	bc
+ 132    0105' C1                pop	bc
+ 133    0106' C1                pop	bc
+ 134    0107' 11 0002           ld	de,2
+ 135    010A' 21 0000           ld	hl,0
+ 136    010D' E3                ex	(sp),hl
+ 137    010E' D5                push	de
+ 138    010F' DD 6E F3          ld	l,(ix+-13)
+ 139    0112' DD 66 F4          ld	h,(ix+-12)
+ 140    0115' E5                push	hl
+ 141    0116' 21 0173'          ld	hl,109f
+ 142    0119' E5                push	hl
+ 143    011A' CD 0000*          call	_printf
+ 144    011D' C1                pop	bc
+ 145    011E' C1                pop	bc
+ 146    011F' C1                pop	bc
+ 147    0120' DD 5E EF          ld	e,(ix+-17)
+ 148    0123' DD 56 F0          ld	d,(ix+-16)
+ 149    0126' DD 6E F1          ld	l,(ix+-15)
+ 150    0129' DD 66 F2          ld	h,(ix+-14)
+ 151    012C' E3                ex	(sp),hl
+ 152    012D' D5                push	de
+ 153    012E' 21 0194'          ld	hl,119f
+ 154    0131' E5                push	hl
+ 155    0132' CD 0000*          call	_printf
+ 156    0135' C3 0000*          jp	cret
+ 157                            global	amod
+ 158                            global	wrelop
+ 159                            global	wrelop
+ 160    0138'                   _demonstrate_operators:
+ 161    0138' CD 0000*          call ncsv
+ 162    013B' FFF4              defw -12
+ 163    013D' DD 36 FE 0A       ld	(ix+-2),10
+ 164    0141' DD 36 FF 00       ld	(ix+-1),0
+ 165    0145' DD 36 FC 03       ld	(ix+-4),3
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   4
+
+
+ 166    0149' DD 36 FD 00       ld	(ix+-3),0
+ 167    014D' DD 36 FA 0A       ld	(ix+-6),10
+ 168    0151' DD 36 FB 00       ld	(ix+-5),0
+ 169    0155' DD 36 F8 0C       ld	(ix+-8),12
+ 170    0159' DD 36 F9 00       ld	(ix+-7),0
+ 171    015D' 21 01A6'          ld	hl,129f
+ 172    0160' E5                push	hl
+ 173    0161' CD 0000*          call	_printf
+ 174    0164' DD 6E FC          ld	l,(ix+-4)
+ 175    0167' DD 66 FD          ld	h,(ix+-3)
+ 176    016A' E3                ex	(sp),hl
+ 177    016B' DD 6E FE          ld	l,(ix+-2)
+ 178    016E' DD 66 FF          ld	h,(ix+-1)
+ 179    0171' E5                push	hl
+ 180    0172' 21 01BE'          ld	hl,139f
+ 181    0175' E5                push	hl
+ 182    0176' CD 0000*          call	_printf
+ 183    0179' C1                pop	bc
+ 184    017A' C1                pop	bc
+ 185    017B' DD 5E FC          ld	e,(ix+-4)
+ 186    017E' DD 56 FD          ld	d,(ix+-3)
+ 187    0181' DD 6E FE          ld	l,(ix+-2)
+ 188    0184' DD 66 FF          ld	h,(ix+-1)
+ 189    0187' 19                add	hl,de
+ 190    0188' E3                ex	(sp),hl
+ 191    0189' 21 01D7'          ld	hl,149f
+ 192    018C' E5                push	hl
+ 193    018D' CD 0000*          call	_printf
+ 194    0190' C1                pop	bc
+ 195    0191' C1                pop	bc
+ 196    0192' DD 5E FC          ld	e,(ix+-4)
+ 197    0195' DD 56 FD          ld	d,(ix+-3)
+ 198    0198' DD 6E FE          ld	l,(ix+-2)
+ 199    019B' DD 66 FF          ld	h,(ix+-1)
+ 200    019E' CD 0000*          call	amod
+ 201    01A1' E5                push	hl
+ 202    01A2' 21 01F1'          ld	hl,159f
+ 203    01A5' E5                push	hl
+ 204    01A6' CD 0000*          call	_printf
+ 205    01A9' C1                pop	bc
+ 206    01AA' 21 020D'          ld	hl,169f
+ 207    01AD' E3                ex	(sp),hl
+ 208    01AE' CD 0000*          call	_printf
+ 209    01B1' DD 7E FA          ld	a,(ix+-6)
+ 210    01B4' DD A6 F8          and	(ix+-8)
+ 211    01B7' 6F                ld	l,a
+ 212    01B8' DD 7E FB          ld	a,(ix+-5)
+ 213    01BB' DD A6 F9          and	(ix+-7)
+ 214    01BE' 67                ld	h,a
+ 215    01BF' E3                ex	(sp),hl
+ 216    01C0' 21 0231'          ld	hl,179f
+ 217    01C3' E5                push	hl
+ 218    01C4' CD 0000*          call	_printf
+ 219    01C7' C1                pop	bc
+ 220    01C8' DD 7E FA          ld	a,(ix+-6)
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   5
+
+
+ 221    01CB' DD B6 F8          or	(ix+-8)
+ 222    01CE' 6F                ld	l,a
+ 223    01CF' DD 7E FB          ld	a,(ix+-5)
+ 224    01D2' DD B6 F9          or	(ix+-7)
+ 225    01D5' 67                ld	h,a
+ 226    01D6' E3                ex	(sp),hl
+ 227    01D7' 21 024B'          ld	hl,189f
+ 228    01DA' E5                push	hl
+ 229    01DB' CD 0000*          call	_printf
+ 230    01DE' C1                pop	bc
+ 231    01DF' DD 6E FA          ld	l,(ix+-6)
+ 232    01E2' DD 66 FB          ld	h,(ix+-5)
+ 233    01E5' 29                add	hl,hl
+ 234    01E6' E3                ex	(sp),hl
+ 235    01E7' 21 0265'          ld	hl,199f
+ 236    01EA' E5                push	hl
+ 237    01EB' CD 0000*          call	_printf
+ 238    01EE' C1                pop	bc
+ 239    01EF' 21 027F'          ld	hl,209f
+ 240    01F2' E3                ex	(sp),hl
+ 241    01F3' CD 0000*          call	_printf
+ 242    01F6' C1                pop	bc
+ 243    01F7' DD 5E FE          ld	e,(ix+-2)
+ 244    01FA' DD 56 FF          ld	d,(ix+-1)
+ 245    01FD' DD 6E FC          ld	l,(ix+-4)
+ 246    0200' DD 66 FD          ld	h,(ix+-3)
+ 247    0203' CD 0000*          call	wrelop
+ 248    0206' F2 0218'          jp	p,L6
+ 249    0209' DD 7E FA          ld	a,(ix+-6)
+ 250    020C' DD B6 FB          or	(ix+-5)
+ 251    020F' CA 0218'          jp	z,L6
+ 252    0212' 21 0001           ld	hl,1
+ 253    0215' C3 021B'          jp	L5
+ 254    0218'                   L6:
+ 255    0218' 21 0000           ld	hl,0
+ 256    021B'                   L5:
+ 257    021B' DD 75 F6          ld	(ix+-10),l
+ 258    021E' DD 74 F7          ld	(ix+-9),h
+ 259    0221' 7D                ld	a,l
+ 260    0222' DD B6 F7          or	(ix+-9)
+ 261    0225' C2 022E'          jp	nz,L4
+ 262    0228' 21 02B6'          ld	hl,239f
+ 263    022B' C3 0231'          jp	L3
+ 264    022E'                   L4:
+ 265    022E' 21 02B1'          ld	hl,229f
+ 266    0231'                   L3:
+ 267    0231' E5                push	hl
+ 268    0232' 21 0295'          ld	hl,219f
+ 269    0235' E5                push	hl
+ 270    0236' CD 0000*          call	_printf
+ 271    0239' C1                pop	bc
+ 272    023A' C1                pop	bc
+ 273    023B' DD 5E FC          ld	e,(ix+-4)
+ 274    023E' DD 56 FD          ld	d,(ix+-3)
+ 275    0241' 21 0005           ld	hl,5
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   6
+
+
+ 276    0244' CD 0000*          call	wrelop
+ 277    0247' FA 0250'          jp	m,L2
+ 278    024A' 21 02CC'          ld	hl,259f
+ 279    024D' C3 0253'          jp	L1
+ 280    0250'                   L2:
+ 281    0250' 21 02BC'          ld	hl,249f
+ 282    0253'                   L1:
+ 283    0253' DD 75 F4          ld	(ix+-12),l
+ 284    0256' DD 74 F5          ld	(ix+-11),h
+ 285    0259' E5                push	hl
+ 286    025A' 21 02E0'          ld	hl,269f
+ 287    025D' E5                push	hl
+ 288    025E' CD 0000*          call	_printf
+ 289    0261' C3 0000*          jp	cret
+ 290                            global	wrelop
+ 291                            global	wrelop
+ 292                            global	wrelop
+ 293    0264'                   _demonstrate_control_flow:
+ 294    0264' CD 0000*          call ncsv
+ 295    0267' FFF9              defw -7
+ 296    0269' DD 36 FE 05       ld	(ix+-2),5
+ 297    026D' DD 36 FF 00       ld	(ix+-1),0
+ 298    0271' DD 36 FD 42       ld	(ix+-3),66
+ 299    0275' DD 36 F9 00       ld	(ix+-7),0
+ 300    0279' DD 36 FA 00       ld	(ix+-6),0
+ 301    027D' 21 02FD'          ld	hl,279f
+ 302    0280' E5                push	hl
+ 303    0281' CD 0000*          call	_printf
+ 304    0284' C1                pop	bc
+ 305    0285' DD 5E FE          ld	e,(ix+-2)
+ 306    0288' DD 56 FF          ld	d,(ix+-1)
+ 307    028B' 21 000A           ld	hl,10
+ 308    028E' CD 0000*          call	wrelop
+ 309    0291' F2 029F'          jp	p,l6
+ 310    0294' 21 031C'          ld	hl,289f
+ 311    0297' E5                push	hl
+ 312    0298' CD 0000*          call	_printf
+ 313    029B' C1                pop	bc
+ 314    029C' C3 02B6'          jp	l7
+ 315    029F'                   l6:
+ 316    029F' 11 0005           ld	de,5
+ 317    02A2' DD 6E FE          ld	l,(ix+-2)
+ 318    02A5' DD 66 FF          ld	h,(ix+-1)
+ 319    02A8' B7                or	a
+ 320    02A9' ED 52             sbc	hl,de
+ 321    02AB' C2 02B6'          jp	nz,l7
+ 322    02AE' 21 0332'          ld	hl,299f
+ 323    02B1' E5                push	hl
+ 324    02B2' CD 0000*          call	_printf
+ 325    02B5' C1                pop	bc
+ 326    02B6'                   l7:
+ 327    02B6' DD 7E FD          ld	a,(ix+-3)
+ 328    02B9' 6F                ld	l,a
+ 329    02BA' 17                rla
+ 330    02BB' 9F                sbc	a,a
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   7
+
+
+ 331    02BC' 67                ld	h,a
+ 332    02BD' E5                push	hl
+ 333    02BE' 21 0348'          ld	hl,309f
+ 334    02C1' E5                push	hl
+ 335    02C2' CD 0000*          call	_printf
+ 336    02C5' C1                pop	bc
+ 337    02C6' C1                pop	bc
+ 338    02C7' DD 7E FD          ld	a,(ix+-3)
+ 339    02CA' FE 41             cp	65
+ 340    02CC' CA 02EF'          jp	z,l11
+ 341    02CF' FE 42             cp	66
+ 342    02D1' CA 02FA'          jp	z,l12
+ 343    02D4' 21 0376'          ld	hl,339f
+ 344    02D7' E5                push	hl
+ 345    02D8' CD 0000*          call	_printf
+ 346    02DB' C1                pop	bc
+ 347    02DC'                   l9:
+ 348    02DC' 21 038D'          ld	hl,349f
+ 349    02DF' E5                push	hl
+ 350    02E0' CD 0000*          call	_printf
+ 351    02E3' C1                pop	bc
+ 352    02E4' DD 36 FB 00       ld	(ix+-5),0
+ 353    02E8' DD 36 FC 00       ld	(ix+-4),0
+ 354    02EC' C3 031D'          jp	l17
+ 355    02EF'                   l11:
+ 356    02EF' 21 035E'          ld	hl,319f
+ 357    02F2'                   L10:
+ 358    02F2' E5                push	hl
+ 359    02F3' CD 0000*          call	_printf
+ 360    02F6' C1                pop	bc
+ 361    02F7' C3 02DC'          jp	l9
+ 362    02FA'                   l12:
+ 363    02FA' 21 036A'          ld	hl,329f
+ 364    02FD' C3 02F2'          jp	L10
+ 365    0300'                   l14:
+ 366    0300' DD 6E FB          ld	l,(ix+-5)
+ 367    0303' DD 66 FC          ld	h,(ix+-4)
+ 368    0306' E5                push	hl
+ 369    0307' 21 0398'          ld	hl,359f
+ 370    030A' E5                push	hl
+ 371    030B' CD 0000*          call	_printf
+ 372    030E' C1                pop	bc
+ 373    030F' C1                pop	bc
+ 374    0310' DD 6E FB          ld	l,(ix+-5)
+ 375    0313' DD 66 FC          ld	h,(ix+-4)
+ 376    0316' 23                inc	hl
+ 377    0317' DD 75 FB          ld	(ix+-5),l
+ 378    031A' DD 74 FC          ld	(ix+-4),h
+ 379    031D'                   l17:
+ 380    031D' 11 0005           ld	de,5
+ 381    0320' DD 6E FB          ld	l,(ix+-5)
+ 382    0323' DD 66 FC          ld	h,(ix+-4)
+ 383    0326' CD 0000*          call	wrelop
+ 384    0329' FA 0300'          jp	m,l14
+ 385    032C' 21 039C'          ld	hl,369f
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   8
+
+
+ 386    032F' E5                push	hl
+ 387    0330' CD 0000*          call	_printf
+ 388    0333' 21 039E'          ld	hl,379f
+ 389    0336' E3                ex	(sp),hl
+ 390    0337' CD 0000*          call	_printf
+ 391    033A' C1                pop	bc
+ 392    033B' C3 035B'          jp	l18
+ 393    033E'                   l19:
+ 394    033E' DD 6E F9          ld	l,(ix+-7)
+ 395    0341' DD 66 FA          ld	h,(ix+-6)
+ 396    0344' E5                push	hl
+ 397    0345' 21 03AB'          ld	hl,389f
+ 398    0348' E5                push	hl
+ 399    0349' CD 0000*          call	_printf
+ 400    034C' C1                pop	bc
+ 401    034D' C1                pop	bc
+ 402    034E' DD 6E F9          ld	l,(ix+-7)
+ 403    0351' DD 66 FA          ld	h,(ix+-6)
+ 404    0354' 23                inc	hl
+ 405    0355' DD 75 F9          ld	(ix+-7),l
+ 406    0358' DD 74 FA          ld	(ix+-6),h
+ 407    035B'                   l18:
+ 408    035B' 11 0005           ld	de,5
+ 409    035E' DD 6E F9          ld	l,(ix+-7)
+ 410    0361' DD 66 FA          ld	h,(ix+-6)
+ 411    0364' CD 0000*          call	wrelop
+ 412    0367' FA 033E'          jp	m,l19
+ 413    036A' 21 03AF'          ld	hl,399f
+ 414    036D' E5                push	hl
+ 415    036E' CD 0000*          call	_printf
+ 416    0371' C3 0000*          jp	cret
+ 417    0374'                   _add_one_by_reference:
+ 418                            global csv
+ 419    0374' CD 0000*          call csv
+ 420    0377' DD 6E 06          ld	l,(ix+6)
+ 421    037A' DD 66 07          ld	h,(ix+7)
+ 422    037D' 4E                ld	c,(hl)
+ 423    037E' 23                inc	hl
+ 424    037F' 46                ld	b,(hl)
+ 425    0380' 03                inc	bc
+ 426    0381' 70                ld	(hl),b
+ 427    0382' 2B                dec	hl
+ 428    0383' 71                ld	(hl),c
+ 429    0384' C3 0000*          jp	cret
+ 430                            global	_factorial
+ 431                            global	wrelop
+ 432                            global	almul
+ 433    0387'                   _factorial:
+ 434                            global csv
+ 435    0387' CD 0000*          call csv
+ 436    038A' DD 5E 06          ld	e,(ix+6)
+ 437    038D' DD 56 07          ld	d,(ix+7)
+ 438    0390' 21 0001           ld	hl,1
+ 439    0393' CD 0000*          call	wrelop
+ 440    0396' FA 03A2'          jp	m,l23
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page   9
+
+
+ 441    0399' 11 0001           ld	de,1
+ 442    039C' 21 0000           ld	hl,0
+ 443    039F' C3 0000*          jp	cret
+ 444    03A2'                   l23:
+ 445    03A2' DD 6E 06          ld	l,(ix+6)
+ 446    03A5' DD 66 07          ld	h,(ix+7)
+ 447    03A8' 2B                dec	hl
+ 448    03A9' E5                push	hl
+ 449    03AA' CD 0387'          call	_factorial
+ 450    03AD' C1                pop	bc
+ 451    03AE' E5                push	hl
+ 452    03AF' D5                push	de
+ 453    03B0' DD 5E 06          ld	e,(ix+6)
+ 454    03B3' DD 56 07          ld	d,(ix+7)
+ 455    03B6' 7A                ld	a,d
+ 456    03B7' 17                rla
+ 457    03B8' 9F                sbc	a,a
+ 458    03B9' 6F                ld	l,a
+ 459    03BA' 67                ld	h,a
+ 460    03BB' CD 0000*          call	almul
+ 461    03BE' C3 0000*          jp	cret
+ 462    03C1'                   _demonstrate_functions_and_point:
+ 463    03C1' CD 0000*          call ncsv
+ 464    03C4' FFFA              defw -6
+ 465    03C6' DD 36 FE 0A       ld	(ix+-2),10
+ 466    03CA' DD 36 FF 00       ld	(ix+-1),0
+ 467    03CE' DD 36 FC 06       ld	(ix+-4),6
+ 468    03D2' DD 36 FD 00       ld	(ix+-3),0
+ 469    03D6' 21 03B1'          ld	hl,409f
+ 470    03D9' E5                push	hl
+ 471    03DA' CD 0000*          call	_printf
+ 472    03DD' C1                pop	bc
+ 473    03DE' DD E5             push	ix
+ 474    03E0' E1                pop	hl
+ 475    03E1' 2B                dec	hl
+ 476    03E2' 2B                dec	hl
+ 477    03E3' E5                push	hl
+ 478    03E4' CD 0374'          call	_add_one_by_reference
+ 479    03E7' DD 6E FE          ld	l,(ix+-2)
+ 480    03EA' DD 66 FF          ld	h,(ix+-1)
+ 481    03ED' E3                ex	(sp),hl
+ 482    03EE' 21 03D2'          ld	hl,419f
+ 483    03F1' E5                push	hl
+ 484    03F2' CD 0000*          call	_printf
+ 485    03F5' C1                pop	bc
+ 486    03F6' DD 6E FC          ld	l,(ix+-4)
+ 487    03F9' DD 66 FD          ld	h,(ix+-3)
+ 488    03FC' E3                ex	(sp),hl
+ 489    03FD' CD 0387'          call	_factorial
+ 490    0400' E3                ex	(sp),hl
+ 491    0401' D5                push	de
+ 492    0402' DD 6E FC          ld	l,(ix+-4)
+ 493    0405' DD 66 FD          ld	h,(ix+-3)
+ 494    0408' E5                push	hl
+ 495    0409' 21 03FA'          ld	hl,429f
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  10
+
+
+ 496    040C' E5                push	hl
+ 497    040D' CD 0000*          call	_printf
+ 498    0410' C1                pop	bc
+ 499    0411' C1                pop	bc
+ 500    0412' C1                pop	bc
+ 501    0413' C1                pop	bc
+ 502    0414' 21 0387'          ld	hl,_factorial
+ 503    0417' DD 75 FA          ld	(ix+-6),l
+ 504    041A' DD 74 FB          ld	(ix+-5),h
+ 505    041D' 21 0005           ld	hl,5
+ 506    0420' E5                push	hl
+ 507    0421' DD 6E FA          ld	l,(ix+-6)
+ 508    0424' DD 66 FB          ld	h,(ix+-5)
+ 509    0427' CD 0000*          call	indir
+ 510    042A' E3                ex	(sp),hl
+ 511    042B' D5                push	de
+ 512    042C' 21 0410'          ld	hl,439f
+ 513    042F' E5                push	hl
+ 514    0430' CD 0000*          call	_printf
+ 515    0433' C3 0000*          jp	cret
+ 516                            global	amul
+ 517                            global	wrelop
+ 518                            global	_strcpy
+ 519                            global	_strcat
+ 520                            global	_strlen
+ 521    0436'                   _demonstrate_arrays_and_strings:
+ 522    0436' CD 0000*          call ncsv
+ 523    0439' FFE0              defw -32
+ 524    043B' 21 0434'          ld	hl,449f
+ 525    043E' E5                push	hl
+ 526    043F' CD 0000*          call	_printf
+ 527    0442' C1                pop	bc
+ 528    0443' DD 36 E0 00       ld	(ix+-32),0
+ 529    0447' DD 36 E1 00       ld	(ix+-31),0
+ 530    044B' C3 047C'          jp	l29
+ 531    044E'                   l26:
+ 532    044E' 11 000A           ld	de,10
+ 533    0451' DD 6E E0          ld	l,(ix+-32)
+ 534    0454' DD 66 E1          ld	h,(ix+-31)
+ 535    0457' 23                inc	hl
+ 536    0458' CD 0000*          call	amul
+ 537    045B' E5                push	hl
+ 538    045C' DD E5             push	ix
+ 539    045E' D1                pop	de
+ 540    045F' DD 6E E0          ld	l,(ix+-32)
+ 541    0462' DD 66 E1          ld	h,(ix+-31)
+ 542    0465' 29                add	hl,hl
+ 543    0466' 19                add	hl,de
+ 544    0467' 11 FFF6           ld	de,-10
+ 545    046A' 19                add	hl,de
+ 546    046B' D1                pop	de
+ 547    046C' 73                ld	(hl),e
+ 548    046D' 23                inc	hl
+ 549    046E' 72                ld	(hl),d
+ 550    046F' DD 6E E0          ld	l,(ix+-32)
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  11
+
+
+ 551    0472' DD 66 E1          ld	h,(ix+-31)
+ 552    0475' 23                inc	hl
+ 553    0476' DD 75 E0          ld	(ix+-32),l
+ 554    0479' DD 74 E1          ld	(ix+-31),h
+ 555    047C'                   l29:
+ 556    047C' 11 0005           ld	de,5
+ 557    047F' DD 6E E0          ld	l,(ix+-32)
+ 558    0482' DD 66 E1          ld	h,(ix+-31)
+ 559    0485' CD 0000*          call	wrelop
+ 560    0488' FA 044E'          jp	m,l26
+ 561    048B' DD 6E FA          ld	l,(ix+-6)
+ 562    048E' DD 66 FB          ld	h,(ix+-5)
+ 563    0491' E5                push	hl
+ 564    0492' 21 0452'          ld	hl,459f
+ 565    0495' E5                push	hl
+ 566    0496' CD 0000*          call	_printf
+ 567    0499' C1                pop	bc
+ 568    049A' 21 0476'          ld	hl,469f
+ 569    049D' E3                ex	(sp),hl
+ 570    049E' DD E5             push	ix
+ 571    04A0' D1                pop	de
+ 572    04A1' 21 FFE2           ld	hl,-30
+ 573    04A4' 19                add	hl,de
+ 574    04A5' E5                push	hl
+ 575    04A6' CD 0000*          call	_strcpy
+ 576    04A9' C1                pop	bc
+ 577    04AA' 21 047A'          ld	hl,479f
+ 578    04AD' E3                ex	(sp),hl
+ 579    04AE' DD E5             push	ix
+ 580    04B0' D1                pop	de
+ 581    04B1' 21 FFE2           ld	hl,-30
+ 582    04B4' 19                add	hl,de
+ 583    04B5' E5                push	hl
+ 584    04B6' CD 0000*          call	_strcat
+ 585    04B9' C1                pop	bc
+ 586    04BA' DD E5             push	ix
+ 587    04BC' D1                pop	de
+ 588    04BD' 21 FFE2           ld	hl,-30
+ 589    04C0' 19                add	hl,de
+ 590    04C1' E3                ex	(sp),hl
+ 591    04C2' 21 0483'          ld	hl,489f
+ 592    04C5' E5                push	hl
+ 593    04C6' CD 0000*          call	_printf
+ 594    04C9' C1                pop	bc
+ 595    04CA' DD E5             push	ix
+ 596    04CC' D1                pop	de
+ 597    04CD' 21 FFE2           ld	hl,-30
+ 598    04D0' 19                add	hl,de
+ 599    04D1' E3                ex	(sp),hl
+ 600    04D2' CD 0000*          call	_strlen
+ 601    04D5' EB                ex	de,hl
+ 602    04D6' 21 0000           ld	hl,0
+ 603    04D9' E3                ex	(sp),hl
+ 604    04DA' D5                push	de
+ 605    04DB' 21 0495'          ld	hl,499f
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  12
+
+
+ 606    04DE' E5                push	hl
+ 607    04DF' CD 0000*          call	_printf
+ 608    04E2' C3 0000*          jp	cret
+ 609    04E5'                   _demonstrate_structs_unions_enum:
+ 610    04E5' CD 0000*          call ncsv
+ 611    04E8' FFCB              defw -53
+ 612    04EA' DD 36 CB 01       ld	(ix+-53),1
+ 613    04EE' 21 04B0'          ld	hl,509f
+ 614    04F1' E5                push	hl
+ 615    04F2' CD 0000*          call	_printf
+ 616    04F5' 21 04D5'          ld	hl,519f
+ 617    04F8' E3                ex	(sp),hl
+ 618    04F9' DD E5             push	ix
+ 619    04FB' D1                pop	de
+ 620    04FC' 21 FFCC           ld	hl,-52
+ 621    04FF' 19                add	hl,de
+ 622    0500' E5                push	hl
+ 623    0501' CD 0000*          call	_strcpy
+ 624    0504' C1                pop	bc
+ 625    0505' DD 36 FE 7B       ld	(ix+-2),123
+ 626    0509' DD 36 FF 00       ld	(ix+-1),0
+ 627    050D' DD 6E FE          ld	l,(ix+-2)
+ 628    0510' DD 66 FF          ld	h,(ix+-1)
+ 629    0513' E3                ex	(sp),hl
+ 630    0514' DD E5             push	ix
+ 631    0516' D1                pop	de
+ 632    0517' 21 FFCC           ld	hl,-52
+ 633    051A' 19                add	hl,de
+ 634    051B' E5                push	hl
+ 635    051C' 21 04DD'          ld	hl,529f
+ 636    051F' E5                push	hl
+ 637    0520' CD 0000*          call	_printf
+ 638    0523' C1                pop	bc
+ 639    0524' C1                pop	bc
+ 640    0525' C1                pop	bc
+ 641    0526' DD 7E CB          ld	a,(ix+-53)
+ 642    0529' FE 01             cp	1
+ 643    052B' C2 0000*          jp	nz,cret
+ 644    052E' 6F                ld	l,a
+ 645    052F' 26 00             ld	h,0
+ 646    0531' E5                push	hl
+ 647    0532' 21 04F5'          ld	hl,539f
+ 648    0535' E5                push	hl
+ 649    0536' CD 0000*          call	_printf
+ 650    0539' C3 0000*          jp	cret
+ 651                            global	_fopen
+ 652                            global	_fprintf
+ 653                            global	_fclose
+ 654                            global	_fgets
+ 655    053C'                   _demonstrate_file_io:
+ 656    053C' CD 0000*          call ncsv
+ 657    053F' FF9A              defw -102
+ 658    0541' 21 0523'          ld	hl,549f
+ 659    0544' E5                push	hl
+ 660    0545' CD 0000*          call	_printf
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  13
+
+
+ 661    0548' 21 0561'          ld	hl,569f
+ 662    054B' E3                ex	(sp),hl
+ 663    054C' 21 0557'          ld	hl,559f
+ 664    054F' E5                push	hl
+ 665    0550' CD 0000*          call	_fopen
+ 666    0553' C1                pop	bc
+ 667    0554' C1                pop	bc
+ 668    0555' DD 75 FE          ld	(ix+-2),l
+ 669    0558' DD 74 FF          ld	(ix+-1),h
+ 670    055B' 7D                ld	a,l
+ 671    055C' DD B6 FF          or	(ix+-1)
+ 672    055F' C2 056D'          jp	nz,l34
+ 673    0562' 21 0563'          ld	hl,579f
+ 674    0565'                   L11:
+ 675    0565' E5                push	hl
+ 676    0566' CD 0000*          call	_printf
+ 677    0569' C1                pop	bc
+ 678    056A' C3 0000*          jp	cret
+ 679    056D'                   l34:
+ 680    056D' 21 058A'          ld	hl,589f
+ 681    0570' E5                push	hl
+ 682    0571' DD 6E FE          ld	l,(ix+-2)
+ 683    0574' DD 66 FF          ld	h,(ix+-1)
+ 684    0577' E5                push	hl
+ 685    0578' CD 0000*          call	_fprintf
+ 686    057B' C1                pop	bc
+ 687    057C' DD 6E FE          ld	l,(ix+-2)
+ 688    057F' DD 66 FF          ld	h,(ix+-1)
+ 689    0582' E3                ex	(sp),hl
+ 690    0583' CD 0000*          call	_fclose
+ 691    0586' 21 059E'          ld	hl,599f
+ 692    0589' E3                ex	(sp),hl
+ 693    058A' CD 0000*          call	_printf
+ 694    058D' 21 05D2'          ld	hl,619f
+ 695    0590' E3                ex	(sp),hl
+ 696    0591' 21 05C8'          ld	hl,609f
+ 697    0594' E5                push	hl
+ 698    0595' CD 0000*          call	_fopen
+ 699    0598' C1                pop	bc
+ 700    0599' C1                pop	bc
+ 701    059A' DD 75 FE          ld	(ix+-2),l
+ 702    059D' DD 74 FF          ld	(ix+-1),h
+ 703    05A0' 7D                ld	a,l
+ 704    05A1' DD B6 FF          or	(ix+-1)
+ 705    05A4' C2 05AD'          jp	nz,l35
+ 706    05A7' 21 05D4'          ld	hl,629f
+ 707    05AA' C3 0565'          jp	L11
+ 708    05AD'                   l35:
+ 709    05AD' 21 05FB'          ld	hl,639f
+ 710    05B0' E5                push	hl
+ 711    05B1' CD 0000*          call	_printf
+ 712    05B4' C1                pop	bc
+ 713    05B5' C3 05C9'          jp	l36
+ 714    05B8'                   l37:
+ 715    05B8' DD E5             push	ix
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  14
+
+
+ 716    05BA' D1                pop	de
+ 717    05BB' 21 FF9A           ld	hl,-102
+ 718    05BE' 19                add	hl,de
+ 719    05BF' E5                push	hl
+ 720    05C0' 21 061A'          ld	hl,649f
+ 721    05C3' E5                push	hl
+ 722    05C4' CD 0000*          call	_printf
+ 723    05C7' C1                pop	bc
+ 724    05C8' C1                pop	bc
+ 725    05C9'                   l36:
+ 726    05C9' DD 6E FE          ld	l,(ix+-2)
+ 727    05CC' DD 66 FF          ld	h,(ix+-1)
+ 728    05CF' E5                push	hl
+ 729    05D0' 21 0064           ld	hl,100
+ 730    05D3' E5                push	hl
+ 731    05D4' DD E5             push	ix
+ 732    05D6' D1                pop	de
+ 733    05D7' 21 FF9A           ld	hl,-102
+ 734    05DA' 19                add	hl,de
+ 735    05DB' E5                push	hl
+ 736    05DC' CD 0000*          call	_fgets
+ 737    05DF' C1                pop	bc
+ 738    05E0' C1                pop	bc
+ 739    05E1' C1                pop	bc
+ 740    05E2' 7D                ld	a,l
+ 741    05E3' B4                or	h
+ 742    05E4' C2 05B8'          jp	nz,l37
+ 743    05E7' DD 6E FE          ld	l,(ix+-2)
+ 744    05EA' DD 66 FF          ld	h,(ix+-1)
+ 745    05ED' E5                push	hl
+ 746    05EE' CD 0000*          call	_fclose
+ 747    05F1' C3 0000*          jp	cret
+ 748    000C'                   psect	data
+ 749    000C'                   19:
+ 750    000C' 3D 3D 3D 3D       defb	61,61,61,61,61,61,61,61,61,61,61,61,61,6
+        0010' 3D 3D 3D 3D       1,61,61
+        0014' 3D 3D 3D 3D       
+        0018' 3D 3D 3D 3D       
+ 751    001C' 3D 3D 3D 3D       defb	61,61,61,61,61,61,61,61,61,61,61,61,61,6
+        0020' 3D 3D 3D 3D       1,61,61
+        0024' 3D 3D 3D 3D       
+        0028' 3D 3D 3D 3D       
+ 752    002C' 3D 3D 3D 3D       defb	61,61,61,61,61,61,61,61,61,61,61,61,61,6
+        0030' 3D 3D 3D 3D       1,61,61
+        0034' 3D 3D 3D 3D       
+        0038' 3D 3D 3D 3D       
+ 753    003C' 3D 0A 00          defb	61,10,0
+ 754    003F'                   29:
+ 755    003F' 3D 3D 20 53       defb	61,61,32,83,104,111,119,99,97,115,101,32
+        0043' 68 6F 77 63       ,80,111,114,116
+        0047' 61 73 65 20       
+        004B' 50 6F 72 74       
+ 756    004F' 61 74 69 6C       defb	97,116,105,108,32,100,97,32,76,105,110,1
+        0053' 20 64 61 20       03,117,97,103,101
+        0057' 4C 69 6E 67       
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  15
+
+
+        005B' 75 61 67 65       
+ 757    005F' 6D 20 43 20       defb	109,32,67,32,40,65,78,83,73,41,10,0
+        0063' 28 41 4E 53       
+        0067' 49 29 0A 00       
+ 758    006B'                   39:
+ 759    006B' 3D 3D 3D 3D       defb	61,61,61,61,61,61,61,61,61,61,61,61,61,6
+        006F' 3D 3D 3D 3D       1,61,61
+        0073' 3D 3D 3D 3D       
+        0077' 3D 3D 3D 3D       
+ 760    007B' 3D 3D 3D 3D       defb	61,61,61,61,61,61,61,61,61,61,61,61,61,6
+        007F' 3D 3D 3D 3D       1,61,61
+        0083' 3D 3D 3D 3D       
+        0087' 3D 3D 3D 3D       
+ 761    008B' 3D 3D 3D 3D       defb	61,61,61,61,61,61,61,61,61,61,61,61,61,6
+        008F' 3D 3D 3D 3D       1,61,61
+        0093' 3D 3D 3D 3D       
+        0097' 3D 3D 3D 3D       
+ 762    009B' 3D 0A 00          defb	61,10,0
+ 763    009E'                   49:
+ 764    009E' 0A 44 65 6D       defb	10,68,101,109,111,110,115,116,114,97,99,
+        00A2' 6F 6E 73 74       97,111,32,99,111
+        00A6' 72 61 63 61       
+        00AA' 6F 20 63 6F       
+ 765    00AE' 6E 63 6C 75       defb	110,99,108,117,105,100,97,32,99,111,109,
+        00B2' 69 64 61 20       32,115,117,99,101
+        00B6' 63 6F 6D 20       
+        00BA' 73 75 63 65       
+ 766    00BE' 73 73 6F 2E       defb	115,115,111,46,10,0
+        00C2' 0A 00             
+ 767    00C4'                   59:
+ 768    00C4' 0A 2D 2D 2D       defb	10,45,45,45,32,49,46,32,86,97,114,105,97
+        00C8' 20 31 2E 20       ,118,101,105
+        00CC' 56 61 72 69       
+        00D0' 61 76 65 69       
+ 769    00D4' 73 20 65 20       defb	115,32,101,32,84,105,112,111,115,32,100,
+        00D8' 54 69 70 6F       101,32,68,97,100
+        00DC' 73 20 64 65       
+        00E0' 20 44 61 64       
+ 770    00E4' 6F 73 20 2D       defb	111,115,32,45,45,45,10,0
+        00E8' 2D 2D 0A 00       
+ 771    00EC'                   69:
+ 772    00EC' 49 6E 74 65       defb	73,110,116,101,103,101,114,58,32,37,100,
+        00F0' 67 65 72 3A       32,40,116,97,109
+        00F4' 20 25 64 20       
+        00F8' 28 74 61 6D       
+ 773    00FC' 61 6E 68 6F       defb	97,110,104,111,58,32,37,108,117,32,98,12
+        0100' 3A 20 25 6C       1,116,101,115,41
+        0104' 75 20 62 79       
+        0108' 74 65 73 29       
+ 774    010C' 0A 00             defb	10,0
+ 775    010E'                   79:
+ 776    010E' 46 6C 6F 61       defb	70,108,111,97,116,58,32,32,32,37,102,32,
+        0112' 74 3A 20 20       40,116,97,109
+        0116' 20 25 66 20       
+        011A' 28 74 61 6D       
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  16
+
+
+ 777    011E' 61 6E 68 6F       defb	97,110,104,111,58,32,37,108,117,32,98,12
+        0122' 3A 20 25 6C       1,116,101,115,41
+        0126' 75 20 62 79       
+        012A' 74 65 73 29       
+ 778    012E' 0A 00             defb	10,0
+ 779    0130'                   89:
+ 780    0130' 44 6F 75 62       defb	68,111,117,98,108,101,58,32,32,37,102,32
+        0134' 6C 65 3A 20       ,40,116,97,109
+        0138' 20 25 66 20       
+        013C' 28 74 61 6D       
+ 781    0140' 61 6E 68 6F       defb	97,110,104,111,58,32,37,108,117,32,98,12
+        0144' 3A 20 25 6C       1,116,101,115,41
+        0148' 75 20 62 79       
+        014C' 74 65 73 29       
+ 782    0150' 0A 00             defb	10,0
+ 783    0152'                   99:
+ 784    0152' 43 68 61 72       defb	67,104,97,114,58,32,32,32,32,37,99,32,40
+        0156' 3A 20 20 20       ,116,97,109
+        015A' 20 25 63 20       
+        015E' 28 74 61 6D       
+ 785    0162' 61 6E 68 6F       defb	97,110,104,111,58,32,37,108,117,32,98,12
+        0166' 3A 20 25 6C       1,116,101,41,10
+        016A' 75 20 62 79       
+        016E' 74 65 29 0A       
+ 786    0172' 00                defb	0
+ 787    0173'                   109:
+ 788    0173' 42 6F 6F 6C       defb	66,111,111,108,58,32,32,32,32,37,100,32,
+        0177' 3A 20 20 20       40,116,97,109
+        017B' 20 25 64 20       
+        017F' 28 74 61 6D       
+ 789    0183' 61 6E 68 6F       defb	97,110,104,111,58,32,37,108,117,32,98,12
+        0187' 3A 20 25 6C       1,116,101,41,10
+        018B' 75 20 62 79       
+        018F' 74 65 29 0A       
+ 790    0193' 00                defb	0
+ 791    0194'                   119:
+ 792    0194' 43 6F 6E 73       defb	67,111,110,115,116,97,110,116,101,32,80,
+        0198' 74 61 6E 74       73,58,32,37,102
+        019C' 65 20 50 49       
+        01A0' 3A 20 25 66       
+ 793    01A4' 0A 00             defb	10,0
+ 794    01A6'                   129:
+ 795    01A6' 0A 2D 2D 2D       defb	10,45,45,45,32,50,46,32,79,112,101,114,9
+        01AA' 20 32 2E 20       7,100,111,114
+        01AE' 4F 70 65 72       
+        01B2' 61 64 6F 72       
+ 796    01B6' 65 73 20 2D       defb	101,115,32,45,45,45,10,0
+        01BA' 2D 2D 0A 00       
+ 797    01BE'                   139:
+ 798    01BE' 41 72 69 74       defb	65,114,105,116,109,101,116,105,99,111,11
+        01C2' 6D 65 74 69       5,58,32,97,61,37
+        01C6' 63 6F 73 3A       
+        01CA' 20 61 3D 25       
+ 799    01CE' 64 2C 20 62       defb	100,44,32,98,61,37,100,10,0
+        01D2' 3D 25 64 0A       
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  17
+
+
+        01D6' 00                
+ 800    01D7'                   149:
+ 801    01D7' 20 20 53 6F       defb	32,32,83,111,109,97,32,40,97,32,43,32,98
+        01DB' 6D 61 20 28       ,41,32,32
+        01DF' 61 20 2B 20       
+        01E3' 62 29 20 20       
+ 802    01E7' 20 20 20 20       defb	32,32,32,32,61,32,37,100,10,0
+        01EB' 3D 20 25 64       
+        01EF' 0A 00             
+ 803    01F1'                   159:
+ 804    01F1' 20 20 52 65       defb	32,32,82,101,115,116,111,32,40,97,32,37,
+        01F5' 73 74 6F 20       37,32,98,41
+        01F9' 28 61 20 25       
+        01FD' 25 20 62 29       
+ 805    0201' 20 20 20 20       defb	32,32,32,32,32,32,61,32,37,100,10,0
+        0205' 20 20 3D 20       
+        0209' 25 64 0A 00       
+ 806    020D'                   169:
+ 807    020D' 0A 42 69 74       defb	10,66,105,116,45,97,45,98,105,116,58,32,
+        0211' 2D 61 2D 62       120,61,49,48
+        0215' 69 74 3A 20       
+        0219' 78 3D 31 30       
+ 808    021D' 20 28 30 78       defb	32,40,48,120,65,41,44,32,121,61,49,50,32
+        0221' 41 29 2C 20       ,40,48,120
+        0225' 79 3D 31 32       
+        0229' 20 28 30 78       
+ 809    022D' 43 29 0A 00       defb	67,41,10,0
+ 810    0231'                   179:
+ 811    0231' 20 20 41 4E       defb	32,32,65,78,68,32,40,120,32,38,32,121,41
+        0235' 44 20 28 78       ,32,32,32
+        0239' 20 26 20 79       
+        023D' 29 20 20 20       
+ 812    0241' 20 20 20 20       defb	32,32,32,32,61,32,37,100,10,0
+        0245' 3D 20 25 64       
+        0249' 0A 00             
+ 813    024B'                   189:
+ 814    024B' 20 20 4F 52       defb	32,32,79,82,32,32,40,120,32,124,32,121,4
+        024F' 20 20 28 78       1,32,32,32
+        0253' 20 7C 20 79       
+        0257' 29 20 20 20       
+ 815    025B' 20 20 20 20       defb	32,32,32,32,61,32,37,100,10,0
+        025F' 3D 20 25 64       
+        0263' 0A 00             
+ 816    0265'                   199:
+ 817    0265' 20 20 53 68       defb	32,32,83,104,105,102,116,32,69,115,113,3
+        0269' 69 66 74 20       2,40,120,32,60
+        026D' 45 73 71 20       
+        0271' 28 78 20 3C       
+ 818    0275' 3C 20 31 29       defb	60,32,49,41,61,32,37,100,10,0
+        0279' 3D 20 25 64       
+        027D' 0A 00             
+ 819    027F'                   209:
+ 820    027F' 0A 4C 6F 67       defb	10,76,111,103,105,99,111,115,32,101,32,8
+        0283' 69 63 6F 73       4,101,114,110,97
+        0287' 20 65 20 54       
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  18
+
+
+        028B' 65 72 6E 61       
+ 821    028F' 72 69 6F 3A       defb	114,105,111,58,10,0
+        0293' 0A 00             
+ 822    0295'                   219:
+ 823    0295' 20 20 28 61       defb	32,32,40,97,32,62,32,98,41,32,38,38,32,4
+        0299' 20 3E 20 62       0,120,32
+        029D' 29 20 26 26       
+        02A1' 20 28 78 20       
+ 824    02A5' 21 3D 20 30       defb	33,61,32,48,41,32,101,32,37,115,10,0
+        02A9' 29 20 65 20       
+        02AD' 25 73 0A 00       
+ 825    02B1'                   229:
+ 826    02B1' 54 52 55 45       defb	84,82,85,69,0
+        02B5' 00                
+ 827    02B6'                   239:
+ 828    02B6' 46 41 4C 53       defb	70,65,76,83,69,0
+        02BA' 45 00             
+ 829    02BC'                   249:
+ 830    02BC' 62 20 65 20       defb	98,32,101,32,109,97,105,111,114,32,113,1
+        02C0' 6D 61 69 6F       17,101,32,53,0
+        02C4' 72 20 71 75       
+        02C8' 65 20 35 00       
+ 831    02CC'                   259:
+ 832    02CC' 62 20 6E 61       defb	98,32,110,97,111,32,101,32,109,97,105,11
+        02D0' 6F 20 65 20       1,114,32,113,117
+        02D4' 6D 61 69 6F       
+        02D8' 72 20 71 75       
+ 833    02DC' 65 20 35 00       defb	101,32,53,0
+ 834    02E0'                   269:
+ 835    02E0' 20 20 52 65       defb	32,32,82,101,115,117,108,116,97,100,111,
+        02E4' 73 75 6C 74       32,100,111,32,116
+        02E8' 61 64 6F 20       
+        02EC' 64 6F 20 74       
+ 836    02F0' 65 72 6E 61       defb	101,114,110,97,114,105,111,58,32,37,115,
+        02F4' 72 69 6F 3A       10,0
+        02F8' 20 25 73 0A       
+        02FC' 00                
+ 837    02FD'                   279:
+ 838    02FD' 0A 2D 2D 2D       defb	10,45,45,45,32,51,46,32,67,111,110,116,1
+        0301' 20 33 2E 20       14,111,108,101
+        0305' 43 6F 6E 74       
+        0309' 72 6F 6C 65       
+ 839    030D' 20 64 65 20       defb	32,100,101,32,70,108,117,120,111,32,45,4
+        0311' 46 6C 75 78       5,45,10,0
+        0315' 6F 20 2D 2D       
+        0319' 2D 0A 00          
+ 840    031C'                   289:
+ 841    031C' 69 66 3A 20       defb	105,102,58,32,105,32,101,32,109,97,105,1
+        0320' 69 20 65 20       11,114,32,113,117
+        0324' 6D 61 69 6F       
+        0328' 72 20 71 75       
+ 842    032C' 65 20 31 30       defb	101,32,49,48,10,0
+        0330' 0A 00             
+ 843    0332'                   299:
+ 844    0332' 69 66 3A 20       defb	105,102,58,32,105,32,101,32,101,120,97,1
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  19
+
+
+        0336' 69 20 65 20       16,97,109,101,110
+        033A' 65 78 61 74       
+        033E' 61 6D 65 6E       
+ 845    0342' 74 65 20 35       defb	116,101,32,53,10,0
+        0346' 0A 00             
+ 846    0348'                   309:
+ 847    0348' 73 77 69 74       defb	115,119,105,116,99,104,58,32,65,32,110,1
+        034C' 63 68 3A 20       11,116,97,32,101
+        0350' 41 20 6E 6F       
+        0354' 74 61 20 65       
+ 848    0358' 20 25 63 2E       defb	32,37,99,46,32,0
+        035C' 20 00             
+ 849    035E'                   319:
+ 850    035E' 45 78 63 65       defb	69,120,99,101,108,101,110,116,101,33,10,
+        0362' 6C 65 6E 74       0
+        0366' 65 21 0A 00       
+ 851    036A'                   329:
+ 852    036A' 4D 75 69 74       defb	77,117,105,116,111,32,66,111,109,33,10,0
+        036E' 6F 20 42 6F       
+        0372' 6D 21 0A 00       
+ 853    0376'                   339:
+ 854    0376' 50 72 65 63       defb	80,114,101,99,105,115,97,32,101,115,116,
+        037A' 69 73 61 20       117,100,97,114,32
+        037E' 65 73 74 75       
+        0382' 64 61 72 20       
+ 855    0386' 6D 61 69 73       defb	109,97,105,115,46,10,0
+        038A' 2E 0A 00          
+ 856    038D'                   349:
+ 857    038D' 66 6F 72 20       defb	102,111,114,32,108,111,111,112,58,32,0
+        0391' 6C 6F 6F 70       
+        0395' 3A 20 00          
+ 858    0398'                   359:
+ 859    0398' 25 64 20 00       defb	37,100,32,0
+ 860    039C'                   369:
+ 861    039C' 0A 00             defb	10,0
+ 862    039E'                   379:
+ 863    039E' 77 68 69 6C       defb	119,104,105,108,101,32,108,111,111,112,5
+        03A2' 65 20 6C 6F       8,32,0
+        03A6' 6F 70 3A 20       
+        03AA' 00                
+ 864    03AB'                   389:
+ 865    03AB' 25 64 20 00       defb	37,100,32,0
+ 866    03AF'                   399:
+ 867    03AF' 0A 00             defb	10,0
+ 868    03B1'                   409:
+ 869    03B1' 0A 2D 2D 2D       defb	10,45,45,45,32,52,46,32,70,117,110,99,11
+        03B5' 20 34 2E 20       1,101,115,32
+        03B9' 46 75 6E 63       
+        03BD' 6F 65 73 20       
+ 870    03C1' 65 20 50 6F       defb	101,32,80,111,110,116,101,105,114,111,11
+        03C5' 6E 74 65 69       5,32,45,45,45,10
+        03C9' 72 6F 73 20       
+        03CD' 2D 2D 2D 0A       
+ 871    03D1' 00                defb	0
+ 872    03D2'                   419:
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  20
+
+
+ 873    03D2' 4E 75 6D 65       defb	78,117,109,101,114,111,32,97,112,111,115
+        03D6' 72 6F 20 61       ,32,99,104,97,109
+        03DA' 70 6F 73 20       
+        03DE' 63 68 61 6D       
+ 874    03E2' 61 64 61 20       defb	97,100,97,32,112,111,114,32,114,101,102,
+        03E6' 70 6F 72 20       101,114,101,110,99
+        03EA' 72 65 66 65       
+        03EE' 72 65 6E 63       
+ 875    03F2' 69 61 3A 20       defb	105,97,58,32,37,100,10,0
+        03F6' 25 64 0A 00       
+ 876    03FA'                   429:
+ 877    03FA' 46 61 74 6F       defb	70,97,116,111,114,105,97,108,32,100,101,
+        03FE' 72 69 61 6C       32,37,100,32,101
+        0402' 20 64 65 20       
+        0406' 25 64 20 65       
+ 878    040A' 20 25 6C 64       defb	32,37,108,100,10,0
+        040E' 0A 00             
+ 879    0410'                   439:
+ 880    0410' 46 61 74 6F       defb	70,97,116,111,114,105,97,108,32,100,101,
+        0414' 72 69 61 6C       32,53,32,40,118
+        0418' 20 64 65 20       
+        041C' 35 20 28 76       
+ 881    0420' 69 61 20 70       defb	105,97,32,112,111,110,116,101,105,114,11
+        0424' 6F 6E 74 65       1,41,32,101,32,37
+        0428' 69 72 6F 29       
+        042C' 20 65 20 25       
+ 882    0430' 6C 64 0A 00       defb	108,100,10,0
+ 883    0434'                   449:
+ 884    0434' 0A 2D 2D 2D       defb	10,45,45,45,32,53,46,32,65,114,114,97,12
+        0438' 20 35 2E 20       1,115,32,101
+        043C' 41 72 72 61       
+        0440' 79 73 20 65       
+ 885    0444' 20 53 74 72       defb	32,83,116,114,105,110,103,115,32,45,45,4
+        0448' 69 6E 67 73       5,10,0
+        044C' 20 2D 2D 2D       
+        0450' 0A 00             
+ 886    0452'                   459:
+ 887    0452' 4F 20 74 65       defb	79,32,116,101,114,99,101,105,114,111,32,
+        0456' 72 63 65 69       101,108,101,109,101
+        045A' 72 6F 20 65       
+        045E' 6C 65 6D 65       
+ 888    0462' 6E 74 6F 20       defb	110,116,111,32,100,111,32,97,114,114,97,
+        0466' 64 6F 20 61       121,32,101,58,32
+        046A' 72 72 61 79       
+        046E' 20 65 3A 20       
+ 889    0472' 25 64 0A 00       defb	37,100,10,0
+ 890    0476'                   469:
+ 891    0476' 4F 6C 61 00       defb	79,108,97,0
+ 892    047A'                   479:
+ 893    047A' 2C 20 4D 75       defb	44,32,77,117,110,100,111,33,0
+        047E' 6E 64 6F 21       
+        0482' 00                
+ 894    0483'                   489:
+ 895    0483' 53 74 72 69       defb	83,116,114,105,110,103,32,102,105,110,97
+        0487' 6E 67 20 66       ,108,58,32,37,115
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  21
+
+
+        048B' 69 6E 61 6C       
+        048F' 3A 20 25 73       
+ 896    0493' 0A 00             defb	10,0
+ 897    0495'                   499:
+ 898    0495' 43 6F 6D 70       defb	67,111,109,112,114,105,109,101,110,116,1
+        0499' 72 69 6D 65       11,32,40,115,116,114
+        049D' 6E 74 6F 20       
+        04A1' 28 73 74 72       
+ 899    04A5' 6C 65 6E 29       defb	108,101,110,41,58,32,37,108,117,10,0
+        04A9' 3A 20 25 6C       
+        04AD' 75 0A 00          
+ 900    04B0'                   509:
+ 901    04B0' 0A 2D 2D 2D       defb	10,45,45,45,32,54,46,32,83,116,114,117,9
+        04B4' 20 36 2E 20       9,116,115,44
+        04B8' 53 74 72 75       
+        04BC' 63 74 73 2C       
+ 902    04C0' 20 55 6E 69       defb	32,85,110,105,111,110,115,32,101,32,69,1
+        04C4' 6F 6E 73 20       10,117,109,115,32
+        04C8' 65 20 45 6E       
+        04CC' 75 6D 73 20       
+ 903    04D0' 2D 2D 2D 0A       defb	45,45,45,10,0
+        04D4' 00                
+ 904    04D5'                   519:
+ 905    04D5' 4C 65 61 6E       defb	76,101,97,110,100,114,111,0
+        04D9' 64 72 6F 00       
+ 906    04DD'                   529:
+ 907    04DD' 45 6D 70 72       defb	69,109,112,114,101,103,97,100,111,58,32,
+        04E1' 65 67 61 64       37,115,32,40,73
+        04E5' 6F 3A 20 25       
+        04E9' 73 20 28 49       
+ 908    04ED' 44 3A 20 25       defb	68,58,32,37,100,41,10,0
+        04F1' 64 29 0A 00       
+ 909    04F5'                   539:
+ 910    04F5' 45 6E 75 6D       defb	69,110,117,109,58,32,65,32,109,97,113,11
+        04F9' 3A 20 41 20       7,105,110,97,32
+        04FD' 6D 61 71 75       
+        0501' 69 6E 61 20       
+ 911    0505' 65 73 74 61       defb	101,115,116,97,32,110,111,32,101,115,116
+        0509' 20 6E 6F 20       ,97,100,111,32,82
+        050D' 65 73 74 61       
+        0511' 64 6F 20 52       
+ 912    0515' 55 4E 4E 49       defb	85,78,78,73,78,71,32,40,37,100,41,46,10,
+        0519' 4E 47 20 28       0
+        051D' 25 64 29 2E       
+        0521' 0A 00             
+ 913    0523'                   549:
+ 914    0523' 0A 2D 2D 2D       defb	10,45,45,45,32,55,46,32,69,110,116,114,9
+        0527' 20 37 2E 20       7,100,97,32
+        052B' 45 6E 74 72       
+        052F' 61 64 61 20       
+ 915    0533' 65 20 53 61       defb	101,32,83,97,105,100,97,32,100,101,32,65
+        0537' 69 64 61 20       ,114,113,117,105
+        053B' 64 65 20 41       
+        053F' 72 71 75 69       
+ 916    0543' 76 6F 73 20       defb	118,111,115,32,40,70,105,108,101,32,73,4
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  22
+
+
+        0547' 28 46 69 6C       7,79,41,32,45
+        054B' 65 20 49 2F       
+        054F' 4F 29 20 2D       
+ 917    0553' 2D 2D 0A 00       defb	45,45,10,0
+ 918    0557'                   559:
+ 919    0557' 74 65 73 74       defb	116,101,115,116,101,46,116,120,116,0
+        055B' 65 2E 74 78       
+        055F' 74 00             
+ 920    0561'                   569:
+ 921    0561' 77 00             defb	119,0
+ 922    0563'                   579:
+ 923    0563' 45 72 72 6F       defb	69,114,114,111,32,97,111,32,97,98,114,10
+        0567' 20 61 6F 20       5,114,32,111,32
+        056B' 61 62 72 69       
+        056F' 72 20 6F 20       
+ 924    0573' 61 72 71 75       defb	97,114,113,117,105,118,111,32,112,97,114
+        0577' 69 76 6F 20       ,97,32,101,115,99
+        057B' 70 61 72 61       
+        057F' 20 65 73 63       
+ 925    0583' 72 69 74 61       defb	114,105,116,97,33,10,0
+        0587' 21 0A 00          
+ 926    058A'                   589:
+ 927    058A' 4F 6C 61 20       defb	79,108,97,32,100,111,32,109,117,110,100,
+        058E' 64 6F 20 6D       111,32,100,111,32
+        0592' 75 6E 64 6F       
+        0596' 20 64 6F 20       
+ 928    059A' 43 21 0A 00       defb	67,33,10,0
+ 929    059E'                   599:
+ 930    059E' 41 72 71 75       defb	65,114,113,117,105,118,111,32,39,116,101
+        05A2' 69 76 6F 20       ,115,116,101,46,116
+        05A6' 27 74 65 73       
+        05AA' 74 65 2E 74       
+ 931    05AE' 78 74 27 20       defb	120,116,39,32,101,115,99,114,105,116,111
+        05B2' 65 73 63 72       ,32,99,111,109,32
+        05B6' 69 74 6F 20       
+        05BA' 63 6F 6D 20       
+ 932    05BE' 73 75 63 65       defb	115,117,99,101,115,115,111,46,10,0
+        05C2' 73 73 6F 2E       
+        05C6' 0A 00             
+ 933    05C8'                   609:
+ 934    05C8' 74 65 73 74       defb	116,101,115,116,101,46,116,120,116,0
+        05CC' 65 2E 74 78       
+        05D0' 74 00             
+ 935    05D2'                   619:
+ 936    05D2' 72 00             defb	114,0
+ 937    05D4'                   629:
+ 938    05D4' 45 72 72 6F       defb	69,114,114,111,32,97,111,32,97,98,114,10
+        05D8' 20 61 6F 20       5,114,32,111,32
+        05DC' 61 62 72 69       
+        05E0' 72 20 6F 20       
+ 939    05E4' 61 72 71 75       defb	97,114,113,117,105,118,111,32,112,97,114
+        05E8' 69 76 6F 20       ,97,32,108,101,105
+        05EC' 70 61 72 61       
+        05F0' 20 6C 65 69       
+ 940    05F4' 74 75 72 61       defb	116,117,114,97,33,10,0
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: main.asm
+                                                                      Page  23
+
+
+        05F8' 21 0A 00          
+ 941    05FB'                   639:
+ 942    05FB' 4C 65 6E 64       defb	76,101,110,100,111,32,100,111,32,97,114,
+        05FF' 6F 20 64 6F       113,117,105,118,111
+        0603' 20 61 72 71       
+        0607' 75 69 76 6F       
+ 943    060B' 20 27 74 65       defb	32,39,116,101,115,116,101,46,116,120,116
+        060F' 73 74 65 2E       ,39,58,10,0
+        0613' 74 78 74 27       
+        0617' 3A 0A 00          
+ 944    061A'                   649:
+ 945    061A' 20 20 3E 20       defb	32,32,62,32,37,115,0
+        061E' 25 73 00          
+ 946    05F4'                   psect	text
+
+
+HI-TECH SOFTWARE Z80 Macro Assembler: 
+                                                                      Page  24
+
+
+
+                      ---------- Symbol Table ----------
+
+                           (ABS) 0000#                                L1 0253'  
+                             L10 02F2'                               L11 0565'  
+                              L2 0250'                                L3 0231'  
+                              L4 022E'                                L5 021B'  
+                              L6 0218'             _add_one_by_reference 0374'  
+ _demonstrate_arrays_and_strings 0436'         _demonstrate_control_flow 0264'  
+            _demonstrate_file_io 053C'  _demonstrate_functions_and_point 03C1'  
+          _demonstrate_operators 0138'  _demonstrate_structs_unions_enum 04E5'  
+_demonstrate_variables_and_types 0037'                        _factorial 0387'  
+                         _fclose 0000*                            _fgets 0000*  
+                          _fopen 0000*                          _fprintf 0000*  
+                           _main 0000'                           _printf 0000*  
+                         _strcat 0000*                           _strcpy 0000*  
+                         _strlen 0000*                             almul 0000*  
+                            amod 0000*                              amul 0000*  
+                            cret 0000*                               csv 0000*  
+                            data 0621#                               e77 0000'  
+                             e78 0004'                               e79 0008'  
+                           indir 0000*                               l11 02EF'  
+                             l12 02FA'                               l14 0300'  
+                             l17 031D'                               l18 035B'  
+                             l19 033E'                               l23 03A2'  
+                             l26 044E'                               l29 047C'  
+                             l34 056D'                               l35 05AD'  
+                             l36 05C9'                               l37 05B8'  
+                              l6 029F'                                l7 02B6'  
+                              l9 02DC'                              ncsv 0000*  
+                            text 05F4#                            wrelop 0000*  
+

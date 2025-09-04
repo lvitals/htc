@@ -1,0 +1,8 @@
+"1 src/test.c
+[v _main `(i 1 e ]
+{
+[e :U _main ]
+[e ) -> 0 `i ]
+[e $U 1 ]
+[e :U 1 ]
+}

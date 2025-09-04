@@ -1,0 +1,4 @@
+b src/local1s.c:39
+r
+p sa
+p sa->info.np[0]

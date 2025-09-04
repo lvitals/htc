@@ -1,0 +1,103 @@
+"4 ../libc/include/math.h
+[v _fabs `(d 0 e ]
+[v _floor `(d 0 e ]
+[v _ceil `(d 0 e ]
+[v _modf `(d 0 e ]
+"5
+[v _sqrt `(d 0 e ]
+[v _atof `(d 0 e ]
+"6
+[v _sin `(d 0 e ]
+[v _cos `(d 0 e ]
+[v _tan `(d 0 e ]
+"7
+[v _asin `(d 0 e ]
+[v _acos `(d 0 e ]
+[v _atan `(d 0 e ]
+[v _atan2 `(d 0 e ]
+"8
+[v _frexp `(d 0 e ]
+[v _ldexp `(d 0 e ]
+"9
+[v _log `(d 0 e ]
+[v _log10 `(d 0 e ]
+[v _pow `(d 0 e ]
+[v _exp `(d 0 e ]
+"10
+[v _sinh `(d 0 e ]
+[v _cosh `(d 0 e ]
+[v _tanh `(d 0 e ]
+"9 tests/atan.c
+[v _atan `(d 1 e ]
+{
+"10
+[v _f `d 1 r ]
+[e :U _atan ]
+"11
+[v F51 `d -> 0 `i s ]
+[i F51
+:U ..
+"13
+.33.058618473989548
+"14
+.58.655751569001961
+"15
+.32.390974856200445
+"16
+.5.8531952112628600
+"17
+.0.19523741936234277
+"19
+-U ..0024346033004411264
+..
+]
+"20
+[v F52 `d -> 0 `i s ]
+[i F52
+:U ..
+"22
+.33.058618473992416
+"23
+.69.675291059524653
+"24
+.49.004348218216250
+"25
+.12.975578862709239
+"27
+.1.0
+..
+]
+"28
+[v _recip `i 1 a ]
+"29
+[v _eval_poly `(d 0 e ]
+[v _fabs `(d 0 e ]
+"30
+[v _val `d 1 a ]
+[v _val_squared `d 1 a ]
+"32
+[e $ ! == = _val ( _fabs _f .0.0 2 ]
+"33
+[e ) .0.0 ]
+[e $U 1 ]
+"34
+[e :U 2 ]
+[e $ ! != = _recip -> > _val .1.0 `i -> 0 `i 3 ]
+"35
+[e = _val / .1.0 _val ]
+"36
+[e :U 3 ]
+[e = _val_squared * _val _val ]
+"37
+[e =* _val / ( _eval_poly , , _val_squared &U F51 -> 5 `i ( _eval_poly , , _val_squared &U F52 -> 4 `i ]
+"38
+[e $ ! != _recip -> 0 `i 4 ]
+"39
+[e = _val - .1.570796326794895 _val ]
+"40
+[e :U 4 ]
+[e ) ? < _f .0.0 : -U _val _val ]
+[e $U 1 ]
+"41
+[e :U 1 ]
+}

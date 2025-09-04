@@ -1,0 +1,211 @@
+psect	text
+global	_atan
+_atan:
+global	ncsv, cret, indir
+call	ncsv
+defw	f23
+psect	data
+F51:
+deff	33.058618473989548
+deff	58.655751569001961
+deff	32.390974856200445
+deff	5.8531952112628600
+deff	0.19523741936234277
+deff	0.1
+F52:
+deff	33.058618473992416
+deff	69.675291059524653
+deff	49.004348218216250
+deff	12.975578862709239
+deff	1.0
+psect	text
+global	_fabs
+psect	data
+e39:	deff 0.0
+psect	text
+ld	de,(e39)
+ld	hl,(e39+2)
+push	hl
+push	de
+ld	e,(ix+6)
+ld	d,(ix+1+6)
+ld	l,(ix+2+6)
+ld	h,(ix+3+6)
+push	hl
+push	de
+call	_fabs
+exx
+ld	hl,4
+add	hl,sp
+ld	sp,hl
+exx
+ld	(ix+-6),e
+ld	(ix+1+-6),d
+ld	(ix+2+-6),l
+ld	(ix+3+-6),h
+global	frelop
+call	frelop
+jp	fnz,l2
+psect	data
+e40:	deff 0.0
+psect	text
+ld	de,(e40)
+ld	hl,(e40+2)
+jp	l1
+l2:
+ld	e,(ix+-6)
+ld	d,(ix+1+-6)
+ld	l,(ix+2+-6)
+ld	h,(ix+3+-6)
+push	hl
+push	de
+psect	data
+e41:	deff 1.0
+psect	text
+ld	de,(e41)
+ld	hl,(e41+2)
+global	frelop
+call	frelop
+ld	bc,1
+jp	flt,20f
+dec	bc
+20:
+ld	(ix+-2),c
+ld	(ix+1+-2),b
+ld	a,c
+or	b
+jp	z,l3
+ld	e,(ix+-6)
+ld	d,(ix+1+-6)
+ld	l,(ix+2+-6)
+ld	h,(ix+3+-6)
+push	hl
+push	de
+psect	data
+e42:	deff 1.0
+psect	text
+ld	de,(e42)
+ld	hl,(e42+2)
+global	fldiv
+call	fldiv
+ld	(ix+-6),e
+ld	(ix+1+-6),d
+ld	(ix+2+-6),l
+ld	(ix+3+-6),h
+l3:
+ld	e,(ix+-6)
+ld	d,(ix+1+-6)
+ld	l,(ix+2+-6)
+ld	h,(ix+3+-6)
+push	hl
+push	de
+ld	e,(ix+-6)
+ld	d,(ix+1+-6)
+ld	l,(ix+2+-6)
+ld	h,(ix+3+-6)
+global	flmul
+call	flmul
+ld	(ix+-10),e
+ld	(ix+1+-10),d
+ld	(ix+2+-10),l
+ld	(ix+3+-10),h
+global	_eval_poly
+ld	hl,4
+push	hl
+ld	hl,F52
+push	hl
+ld	e,(ix+-10)
+ld	d,(ix+1+-10)
+ld	l,(ix+2+-10)
+ld	h,(ix+3+-10)
+push	hl
+push	de
+call	_eval_poly
+exx
+ld	hl,4+2+2
+add	hl,sp
+ld	sp,hl
+exx
+push	hl
+push	de
+ld	hl,5
+push	hl
+ld	hl,F51
+push	hl
+ld	e,(ix+-10)
+ld	d,(ix+1+-10)
+ld	l,(ix+2+-10)
+ld	h,(ix+3+-10)
+push	hl
+push	de
+call	_eval_poly
+exx
+ld	hl,4+2+2
+add	hl,sp
+ld	sp,hl
+exx
+global	fldiv
+call	fldiv
+push	hl
+push	de
+push	ix
+pop	de
+ld	hl,-6
+add	hl,de
+global	asflmul
+call	asflmul
+ld	a,(ix+-2)
+or	(ix+1+-2)
+jp	z,l4
+ld	e,(ix+-6)
+ld	d,(ix+1+-6)
+ld	l,(ix+2+-6)
+ld	h,(ix+3+-6)
+push	hl
+push	de
+psect	data
+e43:	deff 1.570796326794895
+psect	text
+ld	de,(e43)
+ld	hl,(e43+2)
+global	flsub
+call	flsub
+ld	(ix+-6),e
+ld	(ix+1+-6),d
+ld	(ix+2+-6),l
+ld	(ix+3+-6),h
+l4:
+psect	data
+e44:	deff 0.0
+psect	text
+ld	de,(e44)
+ld	hl,(e44+2)
+push	hl
+push	de
+ld	e,(ix+6)
+ld	d,(ix+1+6)
+ld	l,(ix+2+6)
+ld	h,(ix+3+6)
+global	frelop
+call	frelop
+jp	flt,10f
+jp	11f
+11:
+ld	e,(ix+-6)
+ld	d,(ix+1+-6)
+ld	l,(ix+2+-6)
+ld	h,(ix+3+-6)
+jp	12f
+10:
+ld	e,(ix+-6)
+ld	d,(ix+1+-6)
+ld	l,(ix+2+-6)
+ld	h,(ix+3+-6)
+ld	a,h
+xor	80h
+ld	h,a
+12:
+jp	l1
+l1:
+jp	cret
+f23	equ	-10

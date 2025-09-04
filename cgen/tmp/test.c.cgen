@@ -1,0 +1,11 @@
+psect	text
+global	_main
+_main:
+global	ncsv, cret, indir
+call	ncsv
+defw	f1
+ld	hl,0
+jp	l1
+l1:
+jp	cret
+f1	equ	0
