@@ -1,4 +1,4 @@
-"25 ./include/stdio.h
+"25 ../libc/include/stdio.h
 [s S1 `*c 1 `i 1 `*c 1 `us 1 `c 1 ]
 "85
 [v _fclose `(i 0 e ]
@@ -75,7 +75,7 @@
 [v _get4 `(ul 0 e ]
 "68
 [v _get2 `(us 0 e ]
-"7 ./include/stdlib.h
+"7 ../libc/include/stdlib.h
 [v _ptrdiff_t `i 1 t ]
 "8
 [v _size_t `ui 1 t ]
@@ -113,7 +113,7 @@
 [v _abs `(i 0 e ]
 "39
 [v _labs `(l 0 e ]
-"7 src/encode.c
+"7 encode.c
 [s S7 `*S2 1 `uc 1 ]
 [v _np `S7 1 t ]
 "9

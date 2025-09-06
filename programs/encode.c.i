@@ -1,4 +1,4 @@
-# 1 "src/encode.c"
+# 1 "encode.c"
 
 # 1 "./include/huff.h"
 
@@ -6,7 +6,7 @@
 
 
 
-# 1 "./include/stdio.h"
+# 1 "../libc/include/stdio.h"
 
 
 
@@ -16,7 +16,7 @@
 
 
 
-# 13 "./include/stdio.h"
+# 13 "../libc/include/stdio.h"
 
 
 
@@ -72,7 +72,7 @@ extern	struct	_iobuf
 
 
 
-# 71 "./include/stdio.h"
+# 71 "../libc/include/stdio.h"
 
 
 
@@ -183,21 +183,21 @@ extern unsigned short get2(void);
 extern chent *		cptrs[	(1<<8)	];
 extern short		factor;
 
-# 2 "src/encode.c"
+# 2 "encode.c"
 
-# 1 "./include/stdio.h"
-
-
+# 1 "../libc/include/stdio.h"
 
 
 
 
-# 114 "./include/stdio.h"
 
 
-# 3 "src/encode.c"
+# 114 "../libc/include/stdio.h"
 
-# 1 "./include/stdlib.h"
+
+# 3 "encode.c"
+
+# 1 "../libc/include/stdlib.h"
 
 
 
@@ -211,7 +211,7 @@ typedef	unsigned	size_t;
 
 
 
-# 16 "./include/stdlib.h"
+# 16 "../libc/include/stdlib.h"
 
 
 extern int	errno;
@@ -239,7 +239,7 @@ extern long	 labs(long);
 
 
 
-# 4 "src/encode.c"
+# 4 "encode.c"
 typedef struct {
 	node *	np_node;
 	unsigned char	np_len;

@@ -134,12 +134,20 @@ int main(int argc, char **argv)
 
             case 'O':
             case 'o': /* Call output file name */
-                if (outFileName || *pOption == '\0')
+                if (outFileName)
                     fatalErr("Illegal -o flag");
                 else
                 {
-
-                    outFileName = pOption;
+                    if (*pOption == '\0') { /* If no filename immediately follows -o */
+                        if (argc <= 1) { /* Check if there's a next argument */
+                            fatalErr("Missing argument for -o flag");
+                        }
+                        argc--; /* Decrement argc as we consume one more argument */
+                        argv++; /* Advance argv to the next argument */
+                        outFileName = *argv; /* Use the next argument as filename */
+                    } else {
+                        outFileName = pOption;
+                    }
                     pOption = "";
                 }
                 break;
