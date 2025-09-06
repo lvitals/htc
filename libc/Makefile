@@ -11,34 +11,27 @@ INC_DIR = include
 ARCH_DIR = arch/z80
 OBJ_DIR = obj
 LIB_DIR = lib
-BIN_DIR = bin
+
 TMP_DIR = tmp
 
 LIBC_PATH = .
 include ../compile.mk
 
+
+
 # Ensure directories exist
-DIRS = $(OBJ_DIR) $(LIB_DIR) $(BIN_DIR) $(TMP_DIR)
+DIRS = $(OBJ_DIR) $(LIB_DIR) $(TMP_DIR)
 $(DIRS):
 	@mkdir -p $@
 
-# Build tools
-build-tools: $(DIRS)
-	@[ -f $(CPP) ] || $(MAKE) -C ../cpp && echo "BIN_DIR is: $(BIN_DIR)" && cp ../cpp/bin/cpp $(BIN_DIR)/ 
-	@[ -f $(P1) ] || $(MAKE) -C ../p1 && cp ../p1/bin/p1 $(BIN_DIR)/ 
-	@[ -f $(CGEN) ] || $(MAKE) -C ../cgen && cp ../cgen/bin/cgen $(BIN_DIR)/ 
-	@[ -f $(OPTIM) ] || $(MAKE) -C ../optim && cp ../optim/optim $(BIN_DIR)/ 
-	@[ -f $(ZAS) ] || $(MAKE) -C ../zas && cp ../zas/zas $(BIN_DIR)/ 
-	@[ -f $(LINK) ] || $(MAKE) -C ../link && cp ../link/link $(BIN_DIR)/ 
-	@[ -f $(LIBR) ] || $(MAKE) -C ../libr && cp ../libr/libr $(BIN_DIR)/ 
-	@[ -f $(OBJTOHEX) ] || $(MAKE) -C ../objtohex && cp ../objtohex/objtohex $(BIN_DIR)/ 
+ 
 
 # Rule for C files
-$(OBJ_DIR)/%.obj: $(SRC_DIR)/%.c | $(DIRS) build-tools
+$(OBJ_DIR)/%.obj: $(SRC_DIR)/%.c | $(DIRS)
 	$(call compile_c,$<,$@)
 
 # Rule for assembly files
-$(OBJ_DIR)/%.obj: $(ARCH_DIR)/%.as | $(DIRS) build-tools
+$(OBJ_DIR)/%.obj: $(ARCH_DIR)/%.as | $(DIRS)
 	$(info Assembling $< to $@)
 	$(ZAS) $(ASFLAGS) $< -o $@
 
@@ -129,15 +122,11 @@ $(OBJ_DIR)/rrtcpm.obj: $(OBJ_DIR)/zrrtcpm.obj | $(DIRS)
 	cp $< $@
 
 # Main target
-all: build-tools $(LIBS) $(CRTOBJS) $(ZCRTOBJS)
+all: $(LIBS) $(CRTOBJS) $(ZCRTOBJS)
 
 # Clean targets
 clean:
 	$(info Cleaning object and temporary files)
-	rm -rf $(OBJ_DIR)/*.obj $(TMP_DIR)/* $(BIN_DIR)/*
+	rm -rf $(OBJ_DIR)/*.obj $(TMP_DIR)/* $(LIB_DIR)/*.lib 
 
-distclean: clean
-	$(info Cleaning binary files)
-	rm -rf $(BIN_DIR)/*
-
-.PHONY: all clean distclean build-tools
+.PHONY: all clean

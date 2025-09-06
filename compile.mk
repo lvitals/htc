@@ -1,14 +1,14 @@
 # Reusable compilation rules
 
 # Tool paths
-CPP = $(LIBC_PATH)/bin/cpp
-P1 = $(LIBC_PATH)/bin/p1
-CGEN = $(LIBC_PATH)/bin/cgen
-OPTIM = $(LIBC_PATH)/bin/optim
-ZAS = $(LIBC_PATH)/bin/zas
-LINK = $(LIBC_PATH)/bin/link
-LIBR = $(LIBC_PATH)/bin/libr
-OBJTOHEX = $(LIBC_PATH)/bin/objtohex
+CPP = ../cpp/bin/cpp
+P1 = ../p1/bin/p1
+CGEN = ../cgen/bin/cgen
+OPTIM = ../optim/optim
+ZAS = ../zas/zas
+LINK = ../link/link
+LIBR = ../libr/libr
+OBJTOHEX = ../objtohex/objtohex
 
 # Compilation function for C files
 define compile_c

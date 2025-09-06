@@ -1,19 +1,21 @@
 # Root Makefile
 
-all: libc programs tests
+TOOL_DIRS = cpp p1 cgen optim zas link libr objtohex
+
+all: tools libc
+
+tools:
+	@for dir in $(TOOL_DIRS); do \
+		$(MAKE) -C $$dir; \
+	done
 
 libc:
 	$(MAKE) -C libc
 
-programs: libc
-	$(MAKE) -C programs
-
-tests: libc
-	$(MAKE) -C tests
-
 clean:
 	$(MAKE) -C libc clean
-	$(MAKE) -C programs clean
-	$(MAKE) -C tests clean
+	@for dir in $(TOOL_DIRS); do \
+		$(MAKE) -C $$dir clean; \
+	done
 
-.PHONY: all libc programs tests clean
+.PHONY: all tools libc clean
