@@ -31,9 +31,9 @@ extern int	 strncasecmp(char *, char *, size_t);
 #define strnicmp strncasecmp
 /* extern size_t	 strcoll(char *, size_t, char *); */ /* missing */
 extern void	*memchr(void *, int, size_t);
-/* extern size_t	 strcspn(char *, char *); */ /* missing */
-/* extern char	*strpbrk(char *, char *); */ /* missing */
-/* extern size_t	 strspn(char *, char *); *//* missing */
+extern size_t	 strcspn(char *, char *);
+extern char	*strpbrk(char *, char *);
+extern size_t	 strspn(char *, char *);
 extern char	*strstr(char *, char *);
 extern char	*strtok(char *, char *);
 extern void	*memset(void *, int, size_t);

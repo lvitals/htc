@@ -66,7 +66,7 @@ max.obj idiv.obj pnum.obj ldiv.obj qsort.obj \
 swap.obj aslr.obj bmove.obj imul.obj rand.obj \
 alrsh.obj lmul.obj rindex.obj strrchr.obj sbrk.obj \
 shar.obj shll.obj shlr.obj strcat.obj strcmp.obj \
-strcpy.obj strlen.obj stricmp.obj strncat.obj \
+strcpy.obj strcspn.obj strpbrk.obj strspn.obj strlen.obj stricmp.obj strncat.obj \
 strncmp.obj strnicmp.obj strncpy.obj csv.obj rcsv.obj tolower.obj \
 toupper.obj xtoi.obj newfsiz.obj mktime.obj \
 )

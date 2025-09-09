@@ -20,7 +20,7 @@ extern	struct	_iobuf
     char		*_ptr;
     int			 _cnt;
     char		*_base;
-    unsigned short	 _flag;
+    unsigned char	 _flag;
     char		 _file;
 } _iob[_NFILE];
 
