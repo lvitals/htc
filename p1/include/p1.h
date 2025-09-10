@@ -121,7 +121,7 @@ typedef struct _sym
 
 typedef struct
 {
-    char name[3];
+    char name[4];
     char prec;
     uint8_t operandFlags;
     int16_t operatorFlags;

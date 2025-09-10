@@ -1,66 +1,96 @@
-# --- Variáveis de Configuração ---
-# Nome do executável final
-TARGET_NAME = p1
-# Compilador C
+#
+# Makefile for the C Parser (p1)
+# Originally part of the Hi-Tech C toolchain, now ported for modern compilation with GCC/Clang.
+# Revision Date: June 12, 2025
+#
+
+# --- Project Configuration and Tools ---
+# Defines the C compiler to be used. Can be switched to 'clang'.
 CC = gcc
-# Flags de compilação
-CFLAGS = -std=c89 -g -Wall -Wextra -O2
+# Defines the removal tool for the 'clean' rule.
+RM = rm -rf
 
-# --- Estrutura de Diretórios ---
-# Diretório para o executável final
-BIN_DIR = bin
-# Diretório para os arquivos objeto (.o)
-BUILD_DIR = build
-# Diretório para os arquivos fonte (.c)
-SRC_DIR = src
-# Diretório para os arquivos de cabeçalho (.h)
-INCLUDE_DIR = include
+# --- Names and Directories ---
+# Name of the final executable to be generated.
+TARGET_NAME = p1
 
-# --- Geração Automática de Caminhos ---
-# Caminho completo do executável
-TARGET = $(BIN_DIR)/$(TARGET_NAME)
+# Defines the project's directory structure for organization.
+SRCDIR   = src
+INCDIR   = include
+BUILDDIR = build
+BINDIR   = bin
 
-# Lista todos os arquivos fonte (.c) no diretório 'src'
-SRCS = $(wildcard $(SRC_DIR)/*.c)
+# Generates the full path for the final target (e.g., bin/p1).
+TARGET = $(BINDIR)/$(TARGET_NAME)
 
-# Gera os nomes dos arquivos objeto (.o) correspondentes, colocando-os no diretório 'build'
-# Ex: src/main.c -> build/main.o
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
-# Adiciona o diretório 'include' ao caminho de busca do compilador
-CFLAGS += -I$(INCLUDE_DIR)
+# --- Compilation and Linker Flags ---
+#
+# CFLAGS: Flags for the C compiler.
+# -g                   -> Adds debugging information (for use with gdb).
+# -Wall -Wextra        -> Enables the maximum number of useful warnings. Essential for quality code.
+# -O2                  -> Optimization level 2. A good balance between speed and compilation time.
+# -std=c89             -> Ensures the code follows the C89 standard, avoiding old constructs.
+# -I$(INCDIR)          -> Tells the compiler to look for #includes (like "p1.h") in our 'include' directory.
+# -Wno-unused-function -> Suppresses the warning about unused static functions, which can occur
+#                        due to how the original files were structured.
+# -Wno-unused-label    -> Suppresses the warning about unused labels.
+CFLAGS = -g -Wall -Wextra -O2 -std=c89 -I$(INCDIR) -Wno-unused-function -Wno-unused-label -D_POSIX_C_SOURCE=200809L
 
-# --- Regras de Compilação ---
+# LDFLAGS: Flags for the linker. Used to include libraries (e.g., -lm for the math library).
+# Our project has no external dependencies, so it is empty.
+LDFLAGS =
 
-# Regra principal: 'all' é o alvo padrão. .PHONY indica que não é um arquivo.
-.PHONY: all
+
+# --- Automatic File List Generation ---
+#
+# SRCS: Creates a list of all .c files inside the 'src' directory.
+# The 'wildcard' function expands the pattern to find the file names.
+SRCS = $(wildcard $(SRCDIR)/*.c)
+
+# OBJS: Creates the list of corresponding object files (.o).
+# The 'patsubst' (pattern substitution) function transforms each item in the SRCS list
+# (e.g., src/main.c) into its equivalent in the build directory (e.g., build/main.o).
+OBJS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SRCS))
+
+
+# --- Compilation Rules (Targets) ---
+#
+# .PHONY: Declares targets that are not file names. This forces 'make' to execute
+# the rule whenever it is called, even if a file with the same name exists.
+.PHONY: all clean re
+
+# 'all' is the default rule, executed when 'make' is called without arguments.
+# Its dependency is the final executable.
 all: $(TARGET)
 
-# Regra para linkar o executável final a partir dos arquivos objeto.
-# A regra também garante que o diretório 'bin' exista.
-# $@ : O nome do alvo (bin/p1)
-# $^ : Os nomes de todas as dependências (todos os .o)
-$(TARGET): $(OBJS)
-	@echo "Linkando o executável final: $@"
-	@mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) -o $@ $^
-
-# Regra de padrão para compilar um arquivo .c em um .o.
-# A regra garante que o diretório 'build' exista para cada arquivo objeto.
-# $< : O nome da primeira dependência (o arquivo .c correspondente)
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	@echo "Compilando: $< -> $@"
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Regra para limpar os arquivos gerados (objetos e executável)
-.PHONY: clean
+# 'clean' removes all generated files, cleaning the project.
+# Uses the $(RM) variable defined at the top.
 clean:
-	@echo "Limpando diretórios de build e bin..."
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	@echo "Cleaning the project..."
+	$(RM) $(BUILDDIR) $(BINDIR)
 
-# Regra para executar o compilador com argumentos de teste
-.PHONY: run
-run: all
-	@echo "Executando o compilador P1 em um arquivo de teste..."
-	./$(TARGET) test_input.c test_output.asm
+# 're' is a convenience rule for "rebuild".
+# Executes 'clean' and then 'all'.
+re: clean all
+
+
+# --- Pattern and specific Rules ---
+#
+# Linker Rule: Describes how to create the final executable.
+# It is triggered when all its prerequisites (the .o files in $(OBJS)) are ready.
+# $@ -> Represents the target name (in this case, $(TARGET)).
+# $^ -> Represents the list of all prerequisites (in this case, $(OBJS)).
+$(TARGET): $(OBJS)
+	@echo "Linking the executable: $@"
+	@mkdir -p $(BINDIR)
+	$(CC) $(LDFLAGS) -o $@ $^
+	@echo "Project compiled successfully! Executable at: $(TARGET)"
+
+# Generic Compilation Rule: This is a pattern rule that teaches 'make'
+# how to create a .o file in 'build' from a .c file in 'src'.
+# $< -> Represents the name of the first prerequisite (in this case, the corresponding .c file).
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+	@echo "   Compiling: $<"
+	@mkdir -p $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@

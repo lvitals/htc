@@ -1,69 +1,96 @@
-# =============================================================================
-# Makefile para HI-TECH C Compiler Code Generator (cgen)
-# Adaptado para a estrutura de diretórios src, include, build, bin.
-# =============================================================================
+#
+# Makefile for the C Code Generator (cgen)
+# Originally part of the Hi-Tech C toolchain, now ported for modern compilation with GCC/Clang.
+# Revision Date: June 12, 2025
+#
 
-# --- Compilador e Flags ---
+# --- Project Configuration and Tools ---
+# Defines the C compiler to be used. Can be switched to 'clang'.
 CC = gcc
-# Adiciona a flag -I$(INC_DIR) para que o compilador encontre os headers.
-CFLAGS = -std=c89 -g -Wall -Wextra -O2
+# Defines the removal tool for the 'clean' rule.
+RM = rm -rf
 
-# --- Definição de Diretórios ---
-SRC_DIR = src
-INC_DIR = include
-OBJ_DIR = build
-BIN_DIR = bin
+# --- Names and Directories ---
+# Name of the final executable to be generated.
+TARGET_NAME = cgen
 
-# Adiciona o caminho do diretório de include às flags
-CFLAGS += -I$(INC_DIR)
+# Defines the project's directory structure for organization.
+SRCDIR   = src
+INCDIR   = include
+BUILDDIR = build
+BINDIR   = bin
 
-# --- Lista de Arquivos Fonte (apenas os nomes base) ---
-LEX_SRCS = lex1u.c lex2.c
-SYM_SRCS = sym1.c sym2s.c sym3.c
-TREE_SRCS = tree1.c tree2.c tree3.c
-CGEN_SRCS = cgen1.c cgen2s.c cgen3.c
-LOCAL_SRCS = local1s.c local2.c
-OTHER_SRCS = code.c data.c getchar.c main.c
+# Generates the full path for the final target (e.g., bin/cgen).
+TARGET = $(BINDIR)/$(TARGET_NAME)
 
-# Combina todos os nomes base dos arquivos fonte em uma única lista
-_SRCS = $(LEX_SRCS) $(SYM_SRCS) $(TREE_SRCS) $(CGEN_SRCS) $(LOCAL_SRCS) $(OTHER_SRCS)
 
-# --- Mapeamento de Arquivos ---
-# Adiciona o prefixo do diretório de fontes (src/) a cada arquivo .c
-SRCS = $(addprefix $(SRC_DIR)/, $(_SRCS))
-# Cria a lista de arquivos objeto, colocando-os no diretório de build (build/)
-OBJS = $(addprefix $(OBJ_DIR)/, $(_SRCS:.c=.o))
-# Define o caminho completo do executável final
-TARGET = $(BIN_DIR)/cgen
-# Define a lista de headers para usar como dependências
-HEADERS = $(addprefix $(INC_DIR)/, cgen.h portab.h)
+# --- Compilation and Linker Flags ---
+#
+# CFLAGS: Flags for the C compiler.
+# -g                   -> Adds debugging information (for use with gdb).
+# -Wall -Wextra        -> Enables the maximum number of useful warnings. Essential for quality code.
+# -O2                  -> Optimization level 2. A good balance between speed and compilation time.
+# -std=c89             -> Ensures the code follows the C89 standard, avoiding old constructs.
+# -I$(INCDIR)          -> Tells the compiler to look for #includes (like "cgen.h") in our 'include' directory.
+# -Wno-unused-function -> Suppresses the warning about unused static functions, which can occur
+#                        due to how the original files were structured.
+# -Wno-unused-label    -> Suppresses the warning about unused labels.
+CFLAGS = -g -Wall -Wextra -O2 -std=c89 -I$(INCDIR) -Wno-unused-function -Wno-unused-label -D_POSIX_C_SOURCE=200809L
 
-# --- Regras Principais ---
+# LDFLAGS: Flags for the linker. Used to include libraries (e.g., -lm for the math library).
+# Our project has no external dependencies, so it is empty.
+LDFLAGS =
 
-# A regra 'all' é a padrão. Depende do executável final.
+
+# --- Automatic File List Generation ---
+#
+# SRCS: Creates a list of all .c files inside the 'src' directory.
+# The 'wildcard' function expands the pattern to find the file names.
+SRCS = $(wildcard $(SRCDIR)/*.c)
+
+# OBJS: Creates the list of corresponding object files (.o).
+# The 'patsubst' (pattern substitution) function transforms each item in the SRCS list
+# (e.g., src/main.c) into its equivalent in the build directory (e.g., build/main.o).
+OBJS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SRCS))
+
+
+# --- Compilation Rules (Targets) ---
+#
+# .PHONY: Declares targets that are not file names. This forces 'make' to execute
+# the rule whenever it is called, even if a file with the same name exists.
+.PHONY: all clean re
+
+# 'all' is the default rule, executed when 'make' is called without arguments.
+# Its dependency is the final executable.
 all: $(TARGET)
 
-# Regra para linkar o executável final a partir dos arquivos objeto.
-# Depende de todos os arquivos .o.
-$(TARGET): $(OBJS)
-	@echo "==> Linking target: $@"
-	@mkdir -p $(BIN_DIR) # Garante que o diretório 'bin' exista
-	$(CC) $(CFLAGS) -o $@ $^
-
-# Regra de padrão para compilar arquivos .c em .o.
-# Para cada arquivo em 'build/%.o', procura por 'src/%.c'.
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
-	@echo "==> Compiling: $<"
-	@mkdir -p $(OBJ_DIR) # Garante que o diretório 'build' exista
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# --- Regras de Limpeza ---
-
-# A regra 'clean' remove os diretórios de build e binários.
+# 'clean' removes all generated files, cleaning the project.
+# Uses the $(RM) variable defined at the top.
 clean:
-	@echo "==> Cleaning project..."
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	@echo "Cleaning the project..."
+	$(RM) $(BUILDDIR) $(BINDIR)
 
-# --- Phony Targets ---
-# Define alvos que não representam arquivos reais.
-.PHONY: all clean
+# 're' is a convenience rule for "rebuild".
+# Executes 'clean' and then 'all'.
+re: clean all
+
+
+# --- Pattern and specific Rules ---
+#
+# Linker Rule: Describes how to create the final executable.
+# It is triggered when all its prerequisites (the .o files in $(OBJS)) are ready.
+# $@ -> Represents the target name (in this case, $(TARGET)).
+# $^ -> Represents the list of all prerequisites (in this case, $(OBJS)).
+$(TARGET): $(OBJS)
+	@echo "Linking the executable: $@"
+	@mkdir -p $(BINDIR)
+	$(CC) $(LDFLAGS) -o $@ $^
+	@echo "Project compiled successfully! Executable at: $(TARGET)"
+
+# Generic Compilation Rule: This is a pattern rule that teaches 'make'
+# how to create a .o file in 'build' from a .c file in 'src'.
+# $< -> Represents the name of the first prerequisite (in this case, the corresponding .c file).
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+	@echo "   Compiling: $<"
+	@mkdir -p $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@

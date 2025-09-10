@@ -61,52 +61,52 @@ char **_getargs(char *_str, const char *_name);
  *	Initialized variables
  */
 char symbolTypes[] = "D?C???U";
-int width = 80;            // Output width		word_4256
-char commands[] = "rdxms"; // Program Keys
+int width = 80;            /* Output width		word_4256 */
+char commands[] = "rdxms"; /* Program Keys */
 char usageMsg[] = "Usage: libr [-w][-pwidth] key [subkeys symbol] file.lib [modules ...]";
 char arry_42f0[] = {0};
-char order32[] = {0, 1, 2, 3}; // 4358
-uchar order16[] = {0, 1};      // 435c
+char order32[] = {0, 1, 2, 3}; /* 4358 */
+uchar order16[] = {0, 1};      /* 435c */
 
 /*
  *	Descriptions of uninitialized variables and arrays
  */
-int num_ofiles;      // Number of object files		word_4745
-char **cmdLineNames; //
-char *moduleFlags;   // Pointer to an area of modsize num_ofiles
-int *moduleSizes;    // Pointer to an area of modsize num_ofiles * 2
+int num_ofiles;      /* Number of object files		word_4745 */
+char **cmdLineNames; /* */
+char *moduleFlags;   /* Pointer to an area of modsize num_ofiles */
+int *moduleSizes;    /* Pointer to an area of modsize num_ofiles * 2 */
 int tempFileSize;
-int num_modules; // Number of modules in library file	word_474f
+int num_modules; /* Number of modules in library file	word_474f */
 char moduleRead;
-int size_symbols; //
+int size_symbols; /* */
 long longZero;
-char *libraryName; // filename
+char *libraryName; /* filename */
 int newModuleCnt;
 int newSymSize;
 char symbolsRead;
 int symCnt;
-FILE *libraryFp; // file pointer
+FILE *libraryFp; /* file pointer */
 long moduleSize;
 uint8_t moduleBuf[512];
-FILE *tempFp; // file pointer
+FILE *tempFp; /* file pointer */
 uint8_t libBuf[512];
 long unusedLong;
-FILE *libContentFp; // file pointer
+FILE *libContentFp; /* file pointer */
 int symSize;
 uchar listModuleType;
 uchar listDefinedOpt;
 uchar listUndefinedOpt;
-char *listModuleName; //
+char *listModuleName; /* */
 char listModuleFound;
 int columns;
 int curColumn;
-char ban_warn; // byte_4b7b
-int err_num;   // word_4b7c
+char ban_warn; /* byte_4b7b */
+int err_num;   /* word_4b7c */
 int cmdIndex;
 char haveIdent;
 uchar recbuf[512];
-uchar rectyp; // byte_4d81
-int length;   // word_4d82
+uchar rectyp; /* byte_4d81 */
+int length;   /* word_4d82  */
 
 struct sym
 {
@@ -114,12 +114,12 @@ struct sym
     uchar flags;
 };
 
-struct sym *curSymPtr; // ptr to struct sym
+struct sym *curSymPtr; /* ptr to struct sym */
 ulong reclen;
 char hasNonExtern;
-FILE *moduleFp; // file pointer
+FILE *moduleFp; /* file pointer */
 struct sym symbols[500];
-char *moduleName; // file name
+char *moduleName; /* file name */
 
 /****************************************************************
  * Prototype functions are located in sequence of being in
@@ -140,11 +140,11 @@ char *index(char *s, char c);
 #endif
 
 void (*dispatch[])() = {
-    replaceModule,  // Replace modules
-    deleteModule,   // Delete modules
-    extractModules, // Extract modules
-    listModules,    // List modules
-    listWithSymbols // List modules with symbols
+    replaceModule,  /* Replace modules */
+    deleteModule,   /* Delete modules */
+    extractModules, /* Extract modules */
+    listModules,    /* List modules */
+    listWithSymbols /* List modules with symbols */
 };
 
 /**************************************************************************
@@ -255,7 +255,7 @@ void deleteModule()
     openContent();
     openTemp();
     visitModules(copyUnchangedSymbols);
-    processUnmatched(noModule); // Module not found
+    processUnmatched(noModule); /* Module not found */
     rewindLibrary();
     visitModules(copyUnchangedModules);
     commitNewLibrary();
@@ -281,7 +281,7 @@ void extractModules()
 
     openContent();
     visitModules(extractNamedModule);
-    processUnmatched(noModule); // Module not found
+    processUnmatched(noModule); /* Module not found */
 }
 
 /**************************************************************************
@@ -358,7 +358,7 @@ void openLibrary(char *name)
 
     size_symbols = conv_btou16(libBuf);
 
-    //  Get the number of modules in a library file
+    /* Get the number of modules in a library file */
     num_modules = conv_btou16(libBuf + 2);
 }
 
@@ -459,10 +459,10 @@ void visitModules(void (*funptr)(uint8_t *, long))
             unexp_eof();
         }
 
-        symSize = conv_btou16(libBuf);        // +0 Offset in the read buffer
-        symCnt = conv_btou16(libBuf + 2);     // +2
-        moduleSize = conv_btou32(libBuf + 4); // +4
-        unusedLong = conv_btou32(libBuf + 8); // +8
+        symSize = conv_btou16(libBuf);        /* +0 Offset in the read buffer */
+        symCnt = conv_btou16(libBuf + 2);     /* +2 */
+        moduleSize = conv_btou32(libBuf + 4); /* +4 */
+        unusedLong = conv_btou32(libBuf + 8); /* +8 */
 
         readName(libBuf + 12);
 
@@ -540,7 +540,8 @@ void copyModuleToTemp()
     while (l1 != 0)
     {
         l2 = (l1 < 512) ? l1 : 512;
-        if ((int)fread(moduleBuf, 1, l2, libContentFp) != l2) {
+        if ((int)fread(moduleBuf, 1, l2, libContentFp) != l2)
+        {
             unexp_eof();
         }
         writeFile(moduleBuf, 1, l2, tempFp);
@@ -780,7 +781,7 @@ void listModules()
             }
         } while (*++key);
     }
-    visitModules(listOneModule); // Print name obj name from library with the key m
+    visitModules(listOneModule); /* Print name obj name from library with the key m */
 }
 
 /**************************************************************************
@@ -813,9 +814,9 @@ void printObjAndSymbols(uint8_t *p1, long dummy)
     {
         return;
     }
-    printf("%-16.15s", (char *)p1); // Print obj name from library with the key s
+    printf("%-16.15s", (char *)p1); /* Print obj name from library with the key s */
     curColumn = 0;
-    visitSymbols(printSymbol); // Print symbol name with the key s
+    visitSymbols(printSymbol); /* Print symbol name with the key s */
     if (curColumn == 0)
     {
         return;
@@ -837,8 +838,8 @@ void listWithSymbols()
     {
         columns = 1;
     }
-    visitModules(printObjAndSymbols); // Print obj name and symbol names
-    processUnmatched(noModule);       // Module not found
+    visitModules(printObjAndSymbols); /*  Print obj name and symbol names */
+    processUnmatched(noModule);       /*  Module not found */
 }
 
 /**************************************************************************
@@ -869,21 +870,21 @@ int main(int argc, char **argv)
         {
             switch (*l1++)
             {
-            case 'W': // Suppress non-fatal errors
+            case 'W': /* Suppress non-fatal errors */
             case 'w':
-                ban_warn = 1; // Disable warning messages
+                ban_warn = 1; /* Disable warning messages */
                 break;
-            case 'P': // Specify page width
+            case 'P': /* Specify page width */
             case 'p':
                 if (isdigit(*l1))
                 {
-                    width = atoi(l1); // Assigning a new width value
+                    width = atoi(l1); /* Assigning a new width value */
                     l1 = "";
                     break;
                 }
                 /* fallthrough */
             default:
-                fatal_err(usageMsg); // "Usage: ...]"
+                fatal_err(usageMsg); /* "Usage: ...]" */
                 break;
             }
         }
@@ -891,7 +892,7 @@ int main(int argc, char **argv)
 
     if (argc < 2)
     {
-        fatal_err(usageMsg); // "Usage: ...]"
+        fatal_err(usageMsg); /*  "Usage: ...]" */
     }
     l2 = *argv;
     --argc;
@@ -905,7 +906,8 @@ int main(int argc, char **argv)
 
     if (*(l2 + 1) != 0)
     {
-        if (cmdIndex == 3) { /* listModules */
+        if (cmdIndex == 3)
+        { /* listModules */
             g_listModulesKey = l2 + 1;
             g_listModulesName = *argv;
         }
@@ -915,7 +917,7 @@ int main(int argc, char **argv)
     }
     if (argc == 0)
     {
-        fatal_err(usageMsg); // "Usage: ...]"
+        fatal_err(usageMsg); /* "Usage: ...]" */
     }
 
     openLibrary(*argv);
@@ -923,7 +925,7 @@ int main(int argc, char **argv)
 
     (dispatch[cmdIndex])();
 
-    finish(err_num != 0); // Terminate the program with the appropriate error code
+    finish(err_num != 0); /* Terminate the program with the appropriate error code */
 }
 
 /**************************************************************************
@@ -1102,7 +1104,7 @@ void parseIdentRec()
         {
             if (recbuf[l1] != order32[l1])
             {
-                badFormat(moduleName, "ident records do not match"); // bug fix
+                badFormat(moduleName, "ident records do not match"); /* bug fix */
             }
             l1++;
         }
@@ -1111,7 +1113,7 @@ void parseIdentRec()
         {
             if ((char)(recbuf + 4)[l1] != (char)order16[l1])
             {
-                badFormat(moduleName, "ident records do not match"); // bug fix
+                badFormat(moduleName, "ident records do not match"); /* bug fix */
             }
             l1++;
         }
@@ -1162,18 +1164,18 @@ void addSymbol(uchar *name, int flags)
     ++curSymPtr;
 }
 
-// clang-format off
-// Object record types:   | Length (16 bits)     | Record type (8 bits) | Data (Length*8 bits) |
+/* clang-format off */
+/* Object record types:   | Length (16 bits)     | Record type (8 bits) | Data (Length*8 bits) | */
 #define TEXT_RECORD  1
 #define PSECT_RECORD 2
 #define RELOC_RECORD 3
-#define SYM_RECORD   4 // | Value (32 bits)      | flags (16 bits)      | psect name           | symbol name |
+#define SYM_RECORD   4 /* | Value (32 bits)      | flags (16 bits)      | psect name           | symbol name | */
 #define START_RECORD 5
-#define END_RECORD   6 // | flags (16 bits)      |
-#define IDENT_RECORD 7 // | byte order (32 bits) | byte order (16 bits) | machine name         | version number (16 bits) |
+#define END_RECORD   6 /* | flags (16 bits)      | */
+#define IDENT_RECORD 7 /* | byte order (32 bits) | byte order (16 bits) | machine name         | version number (16 bits) | */
 #define XPSECT_RECORD  8
 #define SEGMENT_RECORD 9
-// clang-format on
+/* clang-format on */
 
 /**************************************************************************
  51	scanModule	ok+
@@ -1192,7 +1194,7 @@ int scanModule(char *name)
 
     for (;;)
     {
-        getRecord(); // Get type of record
+        getRecord(); /* Get type of record */
 
         switch (rectyp)
         {
@@ -1297,7 +1299,7 @@ void parseSymbolRec()
         {
             addSymbol(name, flags);
         }
-        st = name; // m6:
+        st = name; /* m6: */
 
         while (*(st++) != 0) /* skip symbol name */
             ;

@@ -4,8 +4,8 @@
 CPP = ../cpp/bin/cpp
 P1 = ../p1/bin/p1
 CGEN = ../cgen/bin/cgen
-OPTIM = ../optim/optim
-ZAS = ../zas/zas
+OPTIM = ../optim/bin/optim
+ZAS = ../zas/bin/zas
 LINK = ../link/link
 LIBR = ../libr/libr
 OBJTOHEX = ../objtohex/objtohex

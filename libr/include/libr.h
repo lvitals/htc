@@ -18,7 +18,11 @@
 #endif
 
 #if !defined(_STDC_VERSION__) || __STDC_VERSION < 201112L
+#if defined(__GNUC__) || defined(__clang__)
+#define _Noreturn __attribute__((noreturn))
+#else
 #define _Noreturn
+#endif
 #endif
 #if defined(_MSC_VER) && !defined(__STDC__)
 #define __STDC__ 1
@@ -32,7 +36,7 @@
 #else
 #define index strchr
 #ifndef _MSC_VER
-#include <unistd.h> // for unlink
+#include <unistd.h> /* for unlink */
 #endif
 #endif
 

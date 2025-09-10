@@ -45,6 +45,13 @@
 #include <setjmp.h>
 #include <stdlib.h>
 #include <string.h>
+#if !defined(_STDC_VERSION__) || __STDC_VERSION__ < 201112L
+#if defined(__GNUC__) || defined(__clang__)
+#define _Noreturn __attribute__((noreturn))
+#else
+#define _Noreturn
+#endif
+#endif
 #if defined(__STDC__) || defined(__STDC_VERSION__)
 #include <stdarg.h>
 #include <stdbool.h>
@@ -718,7 +725,7 @@ int get_line();                      /*  5 sub_0758 ok+ */
 void clr_len_inbuf();                /*  6 sub_07aa ok++ */
 int main(int, char **);              /*  7 sub_07b1 ok+ */
 #if defined(__STDC__) || defined(__STDC_VERSION__)
-void _Noreturn pr_error(char const *fmt, ...);
+_Noreturn void pr_error(char const *fmt, ...);
 void pr_warning(char const *fmt, ...);
 void pr_message(char const *fmt, va_list args);
 #else
@@ -972,6 +979,7 @@ int get_token() {
                 charsLeft = 0;
                 continue;
             }
+            /* fall through */
         default:
             *pc++ = c;                    /* m50: */
             if (ISALPHA(c)) {             /* goto m46; */
@@ -1642,8 +1650,9 @@ void sub_15ad() {
                     gPi->pNext->aux = ccSwap[gPi->aux]; /* swap condition code */
                     removeInstruction(gPi);
                     logOptimise(O_SKIP_OVER_JMP); /* 6fcb opt_msg[7] = "Skips over jumps" */
-                } else if (sub_1c67() || !sub_1d94())
-                    ;
+                } else if (sub_1c67() || !sub_1d94()) {
+                    /* empty */
+                }
             }
         }
     }
@@ -2813,6 +2822,7 @@ void loadFunction() {
             case T_DEFB:
                 if (psect == TEXT)
                     goto case_default;
+                /* fall through */
             case T_DEFM:
             case T_DEFS:
             case T_DEFF:
@@ -3001,6 +3011,7 @@ void sub_436e(register operand_t const *ilist) {
                 printf("iy");
             fputc('+', stdout);
         }
+        /* fall through */
     case T_CONST:
         if (ilist->oPSym) {
             if (ilist->oPSym->label[0])
@@ -3017,6 +3028,7 @@ void sub_436e(register operand_t const *ilist) {
         break;
     case T_REGREF:
         fputc('(', stdout);
+        /* fall through */
     case T_REG:
         printf("%s", regs[ilist->aux]);
         if (ilist->tType == T_REGREF)
@@ -3276,7 +3288,7 @@ bool sub_47e0(int reg, register inst_t const *pi1, inst_t const *pi2) {
         case T_SHIFT:
             if ((pi1->aux & 0xFFE7) != 0x20 && (msk & 0x40))
                 return true;
-
+            /* fall through */
         case T_INCDEC: /* 0x4 "dec", "inc" */
             if ((msk & 0x40) && (pi1->iLhs->tType != T_REG || pi1->iLhs->aux < REG_BC))
                 return false;
@@ -3287,7 +3299,7 @@ bool sub_47e0(int reg, register inst_t const *pi1, inst_t const *pi2) {
         case T_BIT: /* "set", "res", "bit" */
             if (pi1->aux == 0x40 && (msk & 0x40))
                 return false;
-
+            /* fall through */
         case T_0xF: /* 0xF */
             if (sub_475c(pi1->iRhs, msk) || sub_475c(pi1->iLhs, msk))
                 return true;
@@ -3325,7 +3337,7 @@ bool sub_47e0(int reg, register inst_t const *pi1, inst_t const *pi2) {
         case T_CADD: /* CADD */
             if (msk & 0x40)
                 return false;
-
+            /* fall through */
         case T_CARR: /* Add, sub with Carry */
             if ((regTestMasks[pi1->iLhs->aux] | 0x40) & msk)
                 return true;
@@ -3533,14 +3545,7 @@ void heapchk(void const *p) {
 }
 #endif
 
-/**************************************************************************
 
-#######				####### ######  #######   ###   #     #
-#        #    #  #####		#     # #     #    #       #    ##   ##
-#        ##   #  #    #		#     # #     #    #       #    # # # #
-#####    # #  #  #    #		#     # ######     #       #    #  #  #
-#        #  # #  #    #		#     # #          #       #    #     #
-#        #   ##  #    #		#     # #          #       #    #     #
-#######  #    #  #####		####### #          #      ###   #     #
 
-*/
+
+

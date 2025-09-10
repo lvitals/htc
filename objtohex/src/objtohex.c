@@ -142,7 +142,7 @@ int main(int argc, char **argv)
     int16_t blkIdx;
     long remaining;
     uint16_t cnt;
-    uint16_t crc = 0; // avoid compiler warning
+    uint16_t crc = 0; /* avoid compiler warning */
     long curAddr;
     char *wrMode;
     progname = "objto";
@@ -795,7 +795,7 @@ void doSym()
     uint8_t *var11;
     int16_t crc;
     uint8_t symEntry[14];
-    uint16_t var23;
+    uint16_t var23 = 0;
     register uint8_t *p;
 
     if (!w63F8 && !rOpt && !iOpt && !aOpt && !eOpt && (!pOpt || !!sOpt))
@@ -893,6 +893,7 @@ void doSym()
             {
             default:
                 fprintf(stderr, "Unexpected *pname '%c' %s line %d\n", *pname, __FILE__, __LINE__);
+                break;
             case '_':
             case 't':
                 var23 = 0xa200;
