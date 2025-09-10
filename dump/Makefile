@@ -5,23 +5,23 @@
 #
 
 # --- CP/M Tool Paths (MUST be defined before including compile.mk) ---
-CPP = /home/leandro/workspaces/estudo-compilador/htc/cpp/bin/cpp
-P1 = /home/leandro/workspaces/estudo-compilador/htc/p1/bin/p1
-CGEN = /home/leandro/workspaces/estudo-compilador/htc/cgen/bin/cgen
-OPTIM = /home/leandro/workspaces/estudo-compilador/htc/optim/optim
-ZAS = /home/leandro/workspaces/estudo-compilador/htc/zas/zas
-LINK = /home/leandro/workspaces/estudo-compilador/htc/link/link
-LIBR = /home/leandro/workspaces/estudo-compilador/htc/libr/libr
-OBJTOHEX = /home/leandro/workspaces/estudo-compilador/htc/objtohex/objtohex
+CPP = ../cpp/bin/cpp
+P1 = ../p1/bin/p1
+CGEN = ../cgen/bin/cgen
+OPTIM = ../optim/optim
+ZAS = ../zas/zas
+LINK = ../link/link
+LIBR = ../libr/libr
+OBJTOHEX = ../objtohex/objtohex
 
 # Compiler flags for CP/M
-CFLAGS = -I/home/leandro/workspaces/estudo-compilador/htc/libc/include -DCPM -DHI_TECH_C -Dz80 -Dconst=
-ASFLAGS = -J -N -I/home/leandro/workspaces/estudo-compilador/htc/libc/include -I/home/leandro/workspaces/estudo-compilador/htc/libc/arch/z80
+CFLAGS = -I../libc/include -DCPM -DHI_TECH_C -Dz80 -Dconst=
+ASFLAGS = -J -N -I../libc/include -I../libc/arch/z80
 
 # Library paths for CP/M
-LIBC_LIB = /home/leandro/workspaces/estudo-compilador/htc/libc/lib/libc.lib
-LIBF_LIB = /home/leandro/workspaces/estudo-compilador/htc/libc/lib/libf.lib
-CRTCPM_OBJ = /home/leandro/workspaces/estudo-compilador/htc/libc/obj/crtcpm.obj
+LIBC_LIB = ../libc/lib/libc.lib
+LIBF_LIB = ../libc/lib/libf.lib
+CRTCPM_OBJ = ../libc/obj/crtcpm.obj
 
 include ../compile.mk
 
