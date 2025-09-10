@@ -17,7 +17,7 @@ void reset_terminal_mode()
 void reset_terminal_mode_ex()
 {
 	reset_terminal_mode();
-	printf("\x1b[0m");                               // Reset colors
+	printf("\x1b[0m");                               /* Reset colors */
 	fflush(stdout);
 	printf("\n");
 }

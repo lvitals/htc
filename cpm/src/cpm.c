@@ -3,9 +3,9 @@
 #include <libgen.h>
 #define CH_SLASH '/'
 #define _GNU_SOURCE
-#define FOREGROUND_INTENSITY 0x0008		// text color is intensified.
-#define COMMON_LVB_REVERSE_VIDEO 0x4000 // DBCS: Reverse fore/back ground attribute.
-#define COMMON_LVB_UNDERSCORE 0x8000	// DBCS: Underscore.
+#define FOREGROUND_INTENSITY 0x0008		/* text color is intensified. */
+#define COMMON_LVB_REVERSE_VIDEO 0x4000 /* DBCS: Reverse fore/back ground attribute. */
+#define COMMON_LVB_UNDERSCORE 0x8000	/* DBCS: Underscore. */
 typedef unsigned int UINT;
 typedef unsigned char UCHAR;
 typedef unsigned char BYTE;
@@ -101,17 +101,17 @@ int debug_flag;
 
 #define ROM_ORG  0xf800
 #define ROM_CNT  22
-#define BDOS_ORG 0xff00                         // 0xfe00
+#define BDOS_ORG 0xff00                         /* 0xfe00 */
 #define BIOS_CNT 17
-#define BIOS_ORG 0x10000-(3*BIOS_CNT)-3         // 0xff00
-#define BIOS_DPH BIOS_ORG-16                    // 16=sizeof(TDPH)
+#define BIOS_ORG 0x10000-(3*BIOS_CNT)-3         /* 0xff00 */
+#define BIOS_DPH BIOS_ORG-16                    /* 16=sizeof(TDPH) */
 
 #define DMY_DPB   (BDOS_ORG + 16)
 #define DMY_DPB_SFT (DMY_DPB + 2)
 #define DMY_DPB_MSK (DMY_DPB + 3)
 #define DMY_DPB_MAX (DMY_DPB + 5)
 #define DMY_ALLOC (BDOS_ORG + 32)
-#define MAXBLK (128*8)                          // 32 bytes ALLOC
+#define MAXBLK (128*8)                          /* 32 bytes ALLOC */
 
 #define setword( p, x) { (p) = (byte)(x); (p) = (byte)((x)>>8); }
 
@@ -298,11 +298,11 @@ char* CharUpperX(char* st)
 #define stricmp strucmp
 void _splitpath(char *path, char *drive, char *dir, char *name, char *ext)
 {
-	char* cc, sz;
+	char* cc; size_t sz;
 	void* pp;
 	*dir=0; *name=0; *ext=0;
 	pp=malloc((sz=strlen(path))+1);
-	strncpy(pp,path,sz);										/* because dirname flushes `path` */
+	snprintf((char*)pp, sz + 1, "%s", path);										/* because dirname flushes `path` */
 	strncpy(name, (cc=basename(path)) ? cc: "", _MAX_FNAME);
 	strncpy(dir,  (cc=dirname(path)) ? cc: "", _MAX_DIR);
 	if ((strcmp(dir,".")==0)&&(*path!='.'))
@@ -370,7 +370,7 @@ char* findPath(char* path, char* env)
 	  while (*envp) {
 		p = name;
 		while (*envp && (*p = *envp++) != ':') {
-			if ((uint)(p - name) >= sizeof(name))
+			if ((unsigned int)(p - name) >= sizeof(name))
 				break;
 			++p;
 		}
@@ -393,7 +393,7 @@ char* findPath(char* path, char* env)
 char* _searchenv(char *file, char *varname, char *buf)
 {
 	char* cc;
-    return strncpy(buf, (cc=findPath(file,varname)) ? cc : "", _MAX_DIR);
+    snprintf(buf, _MAX_DIR, "%s", (cc=findPath(file,varname)) ? cc : ""); return buf;
 }
 
 /* CASE insensitive string compare */
@@ -496,14 +496,14 @@ void mkFCB( byte *p, char *s)
     p++;
     for ( i = 0; i < 8; i++) {
         c = ( *s && *s != '.') ? *s++ : ' ';
-//	if ( c >= 'a' && c <= 'z') c &= 0x5f;
+/*	if ( c >= 'a' && c <= 'z') c &= 0x5f;*/
         *p++ = (byte)c;
     }
     while ( *s && *s != '.') s++;
     if ( *s) s++;
     for ( i = 0; i < 3; i++) {
         c = ( *s) ? *s++ : ' ';
-//	if ( c >= 'a' && c <= 'z') c &= 0x5f;
+/*	if ( c >= 'a' && c <= 'z') c &= 0x5f;*/
         *p++ = (byte)c;
     }
 }
@@ -588,8 +588,8 @@ typedef struct {
 char ffName[_MAX_PATH];
 char ffDir[_MAX_PATH];
 
-DIR *FindFirstFile(char* lpFileName,	// pointer to name of file to search for  
-    WIN32_FIND_DATA *lpFindFileData) 	// pointer to returned information 
+DIR *FindFirstFile(char* lpFileName,	/* pointer to name of file to search for  */  
+    WIN32_FIND_DATA *lpFindFileData) 	/* pointer to returned information */ 
 {
     DIR *pDir;
     struct dirent *pDirent;
@@ -608,6 +608,7 @@ DIR *FindFirstFile(char* lpFileName,	// pointer to name of file to search for
 	}
 	else {
 		strncpy(ffDir, cpm_drive[ cpm_disk_no], sizeof(ffDir));
+		ffDir[sizeof(ffDir) - 1] = '\0';
 	}
 	strncpy(ffName, cName, sizeof(ffName)-1);
 	if (strncmp(ffName,"*.*",4)==0) {
@@ -640,8 +641,8 @@ DIR *FindFirstFile(char* lpFileName,	// pointer to name of file to search for
 }
 
 int FindNextFile(
-    DIR *hFndFile,				    	// handle to search  
-    WIN32_FIND_DATA *lpFindFileData) 	// pointer to structure for data on found file  
+    DIR *hFndFile,				    	/* handle to search  */  
+    WIN32_FIND_DATA *lpFindFileData) 	/* pointer to structure for data on found file  */  
 {
     struct dirent *pDirent;
     struct stat statbuf;
@@ -663,13 +664,13 @@ int FindNextFile(
 			}
 		}
     }
-//    if (hFndFile!=INVALID_HANDLE_VALUE) closedir(hFndFile);
-//    hFindFile=INVALID_HANDLE_VALUE;
+/*    if (hFndFile!=INVALID_HANDLE_VALUE) closedir(hFndFile); */
+/*    hFindFile=INVALID_HANDLE_VALUE; */
 	return 0;
 } 
 
 int FindClose(
-    DIR *hFndFile 					// file search handle 
+    DIR *hFndFile 					/* file search handle */ 
    )
 {
 	int res;
@@ -682,16 +683,16 @@ int FindClose(
 }
 
 int GetDiskFreeSpace(
-    char* lpRootPathName,			// address of root path 
-    DWORD *lpSectorsPerCluster,		// address of sectors per cluster 
-    DWORD *lpBytesPerSector,		// address of bytes per sector 
-    DWORD *lpNumberOfFreeClusters,	// address of number of free clusters  
-    DWORD *lpTotalNumberOfClusters 	// address of total number of clusters  
+    char* lpRootPathName,			/* address of root path */ 
+    DWORD *lpSectorsPerCluster,		/* address of sectors per cluster */ 
+    DWORD *lpBytesPerSector,		/* address of bytes per sector */ 
+    DWORD *lpNumberOfFreeClusters,	/* address of number of free clusters  */  
+    DWORD *lpTotalNumberOfClusters 	/* address of total number of clusters  */  
    )	
 { 
   struct statvfs stat;
   if (statvfs(lpRootPathName, &stat) != 0) {
-    // error happens, just quits here
+    /* error happens, just quits here */
     return 0;
   }
   *lpTotalNumberOfClusters=stat.f_blocks;
@@ -781,7 +782,7 @@ byte cpm_file_open( byte *fcbaddr, int cr)
       fcbs[ i].addr == fcbaddr && fcbs[ i].fp) {
 DEBUGOUT( stderr, "REOPEN %d - ", i);
       fclose( fcbs[ i].fp); fcbs[ i].fp = NULL;
-    } else { // 2008.12 FCB���N���A����A�v���ɑΉ�
+    } else {
       for ( i = 0; i < MAXFCB && fcbs[ i].fp; i++) {
         if ( fcbs[ i].addr == fcbaddr) {
            fclose( fcbs[ i].fp); fcbs[ i].fp = NULL; break;
@@ -995,12 +996,12 @@ byte cpm_set_rndrec( byte *fcbaddr)
 
 void frameup_dpb_alloc( void)
 {
-    DWORD spc, bps, free, total;
+    DWORD spc = 0, bps = 0, free = 0, total = 0;
     DWORD *alloc = (DWORD *)(mem + DMY_ALLOC);
     byte sft;
     int i;
 
-    GetDiskFreeSpace( NULL, &spc, &bps, &free, &total);
+    GetDiskFreeSpace( ".", &spc, &bps, &free, &total);
     spc *= bps;
     spc >>= 9; sft = 2;
     /* 2008.12 for large disk space (> 2TBytes) */
@@ -1290,7 +1291,7 @@ byte cpm_const( void)
 
 void my_handler(int signum) {
     printf("\nCaught signal %d: Ctrl+C pressed. Exiting gracefully...\n", signum);
-    exit(0); // Encerra o programa
+    exit(0);
 }
 
 void toggleInvertion(void) {
@@ -1464,10 +1465,10 @@ void cpm_putch( int c)
 						break;
 				case 8: w32_left();								/* R1715 left */
 						break;
-//				case 0x0a: if (ordfile || R1715) w32_down();	/* R1715 down */
-//						break;
-//				case 0x0d: if (ordfile || R1715) w32_gotodxy( -255, 0);				/* Carriage Return */
-//						break;
+/*				case 0x0a: if (ordfile || R1715) w32_down(); */	/* R1715 down */
+/*						break;
+				case 0x0d: if (ordfile || R1715) w32_gotodxy( -255, 0); /* Carriage Return */
+/*						break; */
 				case 0x14: w32_cls( 0);							/* R1715 CLReos */
 						break;
 				case 0x15: w32_right();							/* R1715 RIGHT */
@@ -1639,7 +1640,7 @@ void cpm_putch( int c)
 						break;
 					case 'J':                                        /* 2019/ VT52 of ORION-128: CLREOS - �������� �� ����� ������ (������� ������� �������) */
 					case 'y': w32_cls( 0);
-						break;   // 2012.03 add
+						break;
 					default: if (debug_flag) printf( "ESC%c", c);
 						break;
 				}
@@ -1777,19 +1778,19 @@ void cpm_putch( int c)
 				w32_gotodxy( 0, args[ 0]);
 			} else if ( c == 'C') {
 				if ( args[ 0] == 0) args[ 0]++;
-				w32_gotodxy( args[ 0], 0);  // 2012.03 ESC[C <=> ESC[D
+				w32_gotodxy( args[ 0], 0);  /* 2012.03 ESC[C <=> ESC[D */
 			} else if ( c == 'D') {
 				if ( args[ 0] == 0) args[ 0]++;
-				w32_gotodxy( -args[ 0], 0); // 2012.03 ESC[C <=> ESC[D
+				w32_gotodxy( -args[ 0], 0); /* 2012.03 ESC[C <=> ESC[D */
 			} else if ( c == 'J') {
 				w32_cls( args[ 0]);
 			} else if ( c == 'K') {
 				w32_clrln( args[ 0]);
 			} else if ( c == 'M') {
-				if ( args[ 0] == 0) args[ 0]++; // 2012.03 ESC[M = ESC[1M
+				if ( args[ 0] == 0) args[ 0]++; /* 2012.03 ESC[M = ESC[1M */
 				w32_scroll( args[0]);
 			} else if ( c == 'L') {
-				if ( args[ 0] == 0) args[ 0]++; // 2012.03 ESC[L = ESC[1L
+				if ( args[ 0] == 0) args[ 0]++; /* 2012.03 ESC[L = ESC[1L */
 				w32_scroll( -args[0]);
 			} else if ( c == 'u') {
 				w32_restorexy();
