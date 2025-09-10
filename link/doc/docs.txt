@@ -1,0 +1,41 @@
+link - Object Linker
+
+Description:
+The `link` command is an object linker that combines multiple object files and libraries into a single executable or relocatable output file. It resolves symbol references, manages program sections (psects), and handles relocation information. The linker operates in two passes to build the symbol table and generate the final output.
+
+Usage:
+link [options] input ...
+
+Options:
+    -c<base>
+        Produce a binary output file offset by the specified base address.
+    -d<symfile>
+        Write a symbol file to the specified filename. Default is 'l.sym'.
+    -r
+        Leave the output relocatable. Do not resolve all addresses to absolute values.
+    -n
+        Sort symbols by address in the output.
+    -s
+        Strip symbol information from the output file.
+    -x
+        Suppress local symbols in the output file.
+    -z
+        Suppress trivial (compiler-generated) symbols in the output file.
+    -o<ofile>
+        Specify the name of the output file. Default is 'l.bin' for binary output or 'l.obj' for relocatable output.
+    -p<spec>
+        Specify a psect symbol location.
+    -m<mapfile>
+        Write a link map to the specified filename. Default is 'l.map'.
+    -l
+        Retain absolute relocation information.
+    -lm
+        Retain only segment relocation information.
+    -u<sym>
+        Make the specified symbol initially undefined.
+    -w<width>
+        Specify the width for the link map output.
+    -i
+        Ignore undefined symbols.
+    -h
+        Display this help.

@@ -1,0 +1,32 @@
+LIBR Command Documentation
+
+Usage: libr [-w][-pwidth] key [subkeys symbol] file.lib [modules ...]
+
+Description:
+The 'libr' utility is a library manager that allows you to manipulate object files within a library (.lib) file. You can replace, delete, extract, and list modules, as well as list modules with their symbols.
+
+Keys (Commands):
+  r (replace)  Replace modules in the library.
+               Example: libr r module1.obj mylib.lib
+  d (delete)   Delete modules from the library.
+               Example: libr d module1 mylib.lib
+  x (extract)  Extract modules from the library.
+               Example: libr x module1 mylib.lib
+  m (modules)  List modules in the library.
+               Subkeys:
+                 d (defined)   List defined symbols for a module.
+                 u (undefined) List undefined symbols for a module.
+               Example: libr m mylib.lib
+               Example: libr m d mymodule mylib.lib (lists defined symbols in mymodule)
+  s (symbols)  List modules with their symbols.
+               Example: libr s mylib.lib
+
+Options:
+  -w           Suppress non-fatal errors (warnings).
+  -p<width>    Specify page width for output.
+               Example: libr -p120 m mylib.lib
+  -h, --help   Display this help message.
+
+Arguments:
+  file.lib     The path to the library file to be operated on.
+  modules ...  One or more module names or object files, depending on the command.

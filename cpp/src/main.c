@@ -34,6 +34,7 @@ STATIC char *pend;
 char *outptr, *inptr;
 char *newp;
 STATIC char cinit;
+bool g_skip_sayline_on_startup = false;
 
 #define ALFSIZ 256 /* alphabet size */
 STATIC char macbit[ALFSIZ + 11];
@@ -186,7 +187,7 @@ EXPORT int main(int argc, char **argv);
 #ifndef SMALL
 LOCAL void newsbf(void);
 LOCAL struct symtab *newsym(void);
-LOCAL void usage(void);
+
 #endif
 
 #define symsiz 500
@@ -235,6 +236,9 @@ size_t afread(void *ptr, size_t count, FILE *stream) {
 #endif
 
 STATIC void sayline(void) {
+    if (g_skip_sayline_on_startup) {
+        return;
+    }
     if (pflag == 0)
         fprintf(fout, "# %d \"%s\"\n", lineno[ifno], fnames[ifno]);
 }
@@ -1509,6 +1513,11 @@ int yywrap(void) {
 #define VERSION "2.3.modern"
 #define VERSION_DATE "2025/06/12"
 
+STATIC void printHelp(void);
+
+/*
+ * main - Main program.
+ */
 int main(int argc, char *argv[]) {
     register int i, c;
     register char *p;
@@ -1520,6 +1529,20 @@ int main(int argc, char *argv[]) {
         argc = _argc_;
     }
 #endif
+
+    if (argc > 1) {
+        if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
+            printHelp();
+        } else if (strcmp(argv[1], "--version") == 0) {
+            fprintf(stdout, "cpp version %s (%s)\n", VERSION, VERSION_DATE);
+            printf("\n");
+            printf("Copyright (C) 1978 AT&T (John F. Reiser)\n");
+            printf("Copyright (C) 2010-2021 Joerg Schilling\n");
+            printf("Additional Changes Mark Ogden\n");
+            fflush(stdout);
+            exit(0);
+        }
+    }
 
     fin = stdin;
     fout = stdout;
@@ -1559,7 +1582,7 @@ int main(int argc, char *argv[]) {
     dirs[0] = dirnams[0] = ".";
     
     if (argc == 1) {
-        usage();
+        printHelp();
     }
 
     for (i = 1; i < argc && argv[i][0] == '-'; i++) {
@@ -1596,26 +1619,14 @@ int main(int argc, char *argv[]) {
         case 'M': mflag++; break;
         /* case 'Y': sysdir = argv[i] + 2; break; */
         case '\0': break;
-        case '-':
-            if (strcmp(argv[i], "--help") == 0)
-                usage();
-            else if (strcmp(argv[i], "--version") == 0) {
-                printf("cpp version %s %s (%s-%s-%s)\n", VERSION, VERSION_DATE, HOST_CPU, HOST_VENDOR, HOST_OS);
-                printf("\n");
-                printf("Copyright (C) 1978 AT&T (John F. Reiser)\n");
-                printf("Copyright (C) 2010-2021 Joerg Schilling\n");
-                printf("Additional Changes Mark Ogden & Gemini AI\n");
-                exit(0);
-            }
+        case '-': /* This case is for --help, --version, --noinclude */
+            /* These are handled at the top, so only handle --noinclude here */
 #ifndef CPM
-            else if (strcmp(argv[i], "--noinclude") == 0)
+            if (strcmp(argv[i], "--noinclude") == 0)
                 noinclude = 1;
-#endif
             else
-                goto unknown;
-            break;
-        case 'h':
-            usage();
+#endif
+                goto unknown; /* Fall through to unknown if not --noinclude */
             break;
         unknown:
 #endif
@@ -1722,13 +1733,12 @@ int main(int argc, char *argv[]) {
 
     trulvl = 0;
     flslvl = 0;
-    lineno[0] = 1;
-    sayline();
     outptr = inptr = pend;
 #ifndef SMALL
     if (mflag)
         fprintf(mout, "%s: %s\n", input, fnames[ifno]);
 #endif
+    
     control(pend);
     if (fclose(stdout) == -1) {
         fprintf(stderr, "CPP: Error closing output file\n");
@@ -1762,23 +1772,30 @@ STATIC struct symtab *newsym() {
     return (syms++);
 }
 
-STATIC void usage(void) {
-    fprintf(stderr, "Usage: cpp [options] [input-file [output-file]]\n");
-    fprintf(stderr, "Options:\n");
-    fprintf(stderr, "    -C          Pass all comments.\n");
-    fprintf(stderr, "    -Dname      Defines name as 1.\n");
-    fprintf(stderr, "    -Dname=var  Defines name as val.\n");
-    fprintf(stderr, "    -H          Print the path names of include files on standard error.\n");
-    fprintf(stderr, "    -Idirectory Adds directory to the search path.\n");
-    fprintf(stderr, "    -M          Generate a list of dependencies and write them to the output.\n");
-    fprintf(stderr, "    -P          Do not include line control information in the preprocessor output.\n");
-    fprintf(stderr, "    -R          Allow recursive macros.\n");
-    fprintf(stderr, "    -Uname      Remove an initial definition of name.\n");
-    fprintf(stderr, "    -U          Remove all initially predefined macros.\n");
-    fprintf(stderr, "    -Ydirectory Uses directory instead of the standard system include directory.\n");
-    fprintf(stderr, "    -h or --help Print this usage information.\n");
-    fprintf(stderr, "    --noinclude Ignore standard system include path.\n");
-    fprintf(stderr, "    --version   Show cpp version information.\n");
+STATIC void printHelp(void) {
+    fprintf(stdout, "Usage: cpp [options] [input-file]\n");
+    fprintf(stdout, "       [output-file]]\n");
+    fprintf(stdout, "Options:\n");
+    fprintf(stdout, "    -C         Pass all comments.\n");
+    fprintf(stdout, "    -Dname     Defines name as 1.\n");
+    fprintf(stdout, "    -Dname=var Defines name as val.\n");
+    fprintf(stdout, "    -H         Print include paths.\n");
+    fprintf(stdout, "    -Idirectory Adds dir to search path.\n");
+    fprintf(stdout, "    -M         Generate dependencies.\n");
+    fprintf(stdout, "    -P         No line control info.\n");
+    fprintf(stdout, "    -R         Allow recursive macros.\n");
+    fprintf(stdout, "    -Uname     Remove definition of name.\n");
+    fprintf(stdout, "    -U         Remove all predefined macros.\n");
+    fprintf(stdout, "    -Ydirectory Use dir instead of std include.\n");
+    fprintf(stdout, "    -h, --help Display usage info.\n");
+    fprintf(stdout, "    --noinclude Ignore std system include path.\n");
+    fprintf(stdout, "    --version  Show cpp version info.\n");
+    printf("\n");
+    printf("Copyright (C) 1978 AT&T (John F. Reiser)\n");
+    printf("Copyright (C) 2010-2021 Joerg Schilling\n");
+    printf("Additional Changes Mark Ogden\n");
+    g_skip_sayline_on_startup = true;
+    fflush(stdout);
     exit(0);
 }
 #endif

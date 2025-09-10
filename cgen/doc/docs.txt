@@ -1,0 +1,27 @@
+CGEN Command Documentation
+
+The `cgen` command appears to be a code generator, likely part of the Hi-Tech CP/M Z80 C v3.09 toolchain. It takes an input file (presumably intermediate code from a previous compilation stage) and generates an output file.
+
+Usage:
+  cgen [options] [input_file] [output_file]
+
+Arguments:
+  input_file   (Optional) The path to the input file. If not provided, `cgen` reads from standard input (stdin).
+  output_file  (Optional) The path to the output file. If not provided, `cgen` writes to standard output (stdout).
+
+Options:
+  -W or -w
+      Disables warning messages. When this option is used, `cgen` will not
+      output any warning messages to stderr.
+
+  -R
+      Enables a specific internal processing option. The exact behavior is not
+      explicitly defined in the `main.c` source code without further analysis
+      of the `rflag` variable's usage throughout the program.
+
+Examples:
+  Process `input.s` and write output to `output.obj`:
+  `cgen input.s output.obj`
+
+  Process `input.s` and suppress warnings:
+  `cgen -w input.s`

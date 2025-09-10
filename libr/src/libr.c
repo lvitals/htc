@@ -63,7 +63,8 @@ char **_getargs(char *_str, const char *_name);
 char symbolTypes[] = "D?C???U";
 int width = 80;            /* Output width		word_4256 */
 char commands[] = "rdxms"; /* Program Keys */
-char usageMsg[] = "Usage: libr [-w][-pwidth] key [subkeys symbol] file.lib [modules ...]";
+
+char usageMsg[] = "Usage: libr [options] key\n""       [subkeys symbol] file.lib\n""       [modules ...]";
 char arry_42f0[] = {0};
 char order32[] = {0, 1, 2, 3}; /* 4358 */
 uchar order16[] = {0, 1};      /* 435c */
@@ -845,6 +846,23 @@ void listWithSymbols()
 /**************************************************************************
  37	main	sub_0f38h	ok+
  **************************************************************************/
+void printHelp(void)
+{
+    fprintf(stdout, "%s\n", usageMsg);
+    fprintf(stdout, "Keys:\n");
+
+    fprintf(stdout, "  r(eplace)  Replace modules.\n");
+    fprintf(stdout, "  d(elete)   Delete modules.\n");
+    fprintf(stdout, "  x(tract)   Extract modules.\n");
+    fprintf(stdout, "  m(odules)  List modules.\n");
+    fprintf(stdout, "  s(ymbols)  List modules & symbols.\n");
+    fprintf(stdout, "\nOptions:\n");
+    fprintf(stdout, "  -w         Suppress warnings.\n");
+    fprintf(stdout, "  -p<width>  Set output width.\n");
+    fprintf(stdout, "  -h, --help Display help.\n");
+    exit(EXIT_SUCCESS);
+}
+
 int main(int argc, char **argv)
 {
     char *l1;
@@ -863,6 +881,12 @@ int main(int argc, char **argv)
 #endif
 
     fclose(stdin);
+    /* Check for help flags first */
+    if (argc > 1 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0))
+    {
+        printHelp();
+    }
+
     for (--argc, ++argv; argc && **argv == '-'; --argc, ++argv)
     {
         l1 = *argv + 1;
@@ -884,7 +908,7 @@ int main(int argc, char **argv)
                 }
                 /* fallthrough */
             default:
-                fatal_err(usageMsg); /* "Usage: ...]" */
+                printHelp();
                 break;
             }
         }
@@ -892,14 +916,14 @@ int main(int argc, char **argv)
 
     if (argc < 2)
     {
-        fatal_err(usageMsg); /*  "Usage: ...]" */
+        printHelp();
     }
     l2 = *argv;
     --argc;
     ++argv;
     if ((l1 = index(commands, tolower(*l2))) == NULL)
     {
-        fatal_err("Keys: r(eplace), d(elete), (e)x(tract), m(odules), s(ymbols)");
+        printHelp();
     }
 
     cmdIndex = (int)(l1 - commands);
@@ -917,7 +941,7 @@ int main(int argc, char **argv)
     }
     if (argc == 0)
     {
-        fatal_err(usageMsg); /* "Usage: ...]" */
+        printHelp();
     }
 
     openLibrary(*argv);

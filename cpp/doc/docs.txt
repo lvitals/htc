@@ -1,0 +1,37 @@
+cpp - C Preprocessor
+
+Description:
+The `cpp` command is a C preprocessor that processes source code files before compilation. It handles macro expansions, include directives, and conditional compilation.
+
+Usage:
+cpp [options] [input-file [output-file]]
+
+Options:
+    -C
+        Pass all comments to the output. By default, comments are removed.
+    -Dname
+        Defines 'name' as 1. This is equivalent to `#define name 1` in the source code.
+    -Dname=var
+        Defines 'name' as 'val'. This is equivalent to `#define name val` in the source code.
+    -H
+        Print the path names of include files to standard error as they are processed.
+    -Idirectory
+        Adds 'directory' to the list of directories searched for include files. Directories are searched in the order they appear on the command line.
+    -M
+        Generate a list of dependencies (Makefile format) and write them to the output. This is useful for build systems to track file dependencies.
+    -P
+        Do not include line control information (e.g., `#line` directives) in the preprocessor output.
+    -R
+        Allow recursive macro expansions. By default, `cpp` might limit recursion to prevent infinite loops.
+    -Uname
+        Remove any initial definition of 'name'. This undefines a macro that might be predefined by the system or other options.
+    -U
+        Remove all initially predefined macros. This clears the default set of macros provided by the preprocessor.
+    -Ydirectory
+        Uses 'directory' instead of the standard system include directory. This overrides the default system include path.
+    -h, --help
+        Print this usage information and exit.
+    --noinclude
+        Ignore the standard system include path. Only directories specified with -I will be searched.
+    --version
+        Show `cpp` version information and exit.

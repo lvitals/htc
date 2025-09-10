@@ -1,0 +1,54 @@
+P1 Command Documentation
+
+The `p1` command appears to be a preprocessor or the first pass of a compiler, part of the Hi-Tech CP/M Z80 C v3.09 toolchain. It processes source files, handles input/output redirection, and can generate cross-reference files.
+
+Usage:
+  p1 [options] [input_file] [output_file] [temporary_file]
+
+Arguments:
+  input_file      (Optional) The path to the input source file. If not provided, `p1` reads from standard input (stdin).
+  output_file     (Optional) The path to the output file. If not provided, `p1` writes to standard output (stdout).
+  temporary_file  (Optional) The path to a temporary file used by `p1`. Defaults to "p1.tmp" if not specified.
+
+Options:
+  -E <filename> or -e <filename>
+      Redirects standard error (stderr) output to the specified <filename>.
+      Error messages and warnings will be written to this file.
+      Example: `p1 -E errors.log myprogram.c`
+
+  -S or -s
+      Enables a specific internal processing option. The exact behavior is not
+      explicitly defined in the `main.c` source code without further analysis
+      of the `s_opt` variable's usage throughout the program.
+
+  -W or -w
+      Suppresses warning messages. When this option is used, `p1` will not
+      output any warning messages to stderr or the redirected error file.
+      Example: `p1 -W myprogram.c`
+
+  -L or -l
+      Enables another specific internal processing option. Similar to `-S`,
+      the precise effect of this option requires deeper analysis of the
+      `l_opt` variable's usage within the `p1` source code.
+
+  -C <filename> or -c <filename>
+      Generates a cross-reference file. The output will be written to the
+      specified <filename>. If <filename> is not provided (i.e., only `-C` or
+      `-c` is used), a default filename will be generated based on the input
+      source file's name with a `.crf` extension (e.g., `myprogram.crf` for
+      `myprogram.c`).
+      Example: `p1 -C myprogram.crf myprogram.c`
+      Example: `p1 -c myprogram.c` (generates `myprogram.crf`)
+
+Examples:
+  Process `input.c` and write output to `output.s`:
+  `p1 input.c output.s`
+
+  Process `input.c`, suppress warnings, and write output to `output.s`:
+  `p1 -w input.c output.s`
+
+  Process `input.c`, generate a cross-reference file `input.crf`, and write output to `output.s`:
+  `p1 -c input.c output.s`
+
+  Process `input.c`, redirect errors to `errors.txt`, and write output to `output.s`:
+  `p1 -e errors.txt input.c output.s`

@@ -1,31 +1,31 @@
 /*
- *
+ * 
  * The cref.c file is part of the restored P1.COM program
  * from the Hi-Tech CP/M Z80 C v3.09
- *
+ * 
  * Not a commercial goal of this laborious work is to popularize among
  * potential fans of 8-bit computers the old HI-TECH Z80 C compiler V3.09
  * (HI-TECH Software) and extend its life, outside of the CP/M environment
  * for full operation in windows 32/64 and Unix-like operating systems
- *
+ * 
  * The HI-TECH Z80 C cross compiler V3.09 is provided free of charge for any use,
  * private or commercial, strictly as-is. No warranty or product support
  * is offered or implied including merchantability, fitness for a particular
  * purpose, or non-infringement. In no event will HI-TECH Software or its
  * corporate affiliates be liable for any direct or indirect damages.
- *
+ * 
  * You may use this software for whatever you like, providing you acknowledge
  * that the copyright to this software remains with HI-TECH Software and its
  * corporate affiliates.
- *
+ * 
  * All copyrights to the algorithms used, binary code, trademarks, etc.
  * belong to the legal owner - Microchip Technology Inc. and its subsidiaries.
  * Commercial use and distribution of recreated source codes without permission
  * from the copyright holderis strictly prohibited.
- *
- *
+ * 
+ * 
  * See the readme.md file for additional commentary
- *
+ * 
  * Mark Ogden
  * 25-Aug-2022
  */
@@ -33,15 +33,15 @@
  *  Changes
  *  25-Aug-2022
  *      Add support for UZI-180 build as identified by Nikitin Andrey
- *
+ * 
  */
 
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <ctype.h> 
+#include <stdarg.h> 
+#include <stdint.h> 
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <string.h> 
 
 /*
  * CP/M has a very limited command line length, to work around this
@@ -143,6 +143,20 @@ void printXref(register sym_t *sym);
  */
 char *xgets(char *buf, int size);
 
+void printHelp(void) {
+    fprintf(stdout, "Usage: cref [options] [input_file]+\n\n");
+    fprintf(stdout, "Options:\n");
+    fprintf(stdout, "  -O <file>  Output filename.\n");
+    fprintf(stdout, "  -P <width> Set output line width.\n");
+    fprintf(stdout, "  -L <len>   Set page length.\n");
+    fprintf(stdout, "  -T <text>  Set page header text.\n");
+    fprintf(stdout, "  -X <prefix>Exclude symbols by prefix.\n");
+    fprintf(stdout, "  -S <file>  Exclude symbols from file.\n");
+    fprintf(stdout, "  -I         Include file references.\n");
+    fprintf(stdout, "  -h, --help Display this help message.\n");
+    exit(EXIT_SUCCESS);
+}
+
 uint16_t hash(register char *s, uint16_t size)
 {
     uint16_t val = 0;
@@ -206,7 +220,7 @@ int cmpSym(const sym_t **pp1, const sym_t **pp2)
     return strcmp(p1->name, p2->name);
 }
 
-void packSym()
+void packSym(void)
 {
     sym_t **var2;
     sym_t **var4;
@@ -268,7 +282,12 @@ int main(int argc, char **argv)
         argc = _argc_;
     }
 #endif
-    while (argc && argv[0][0] == '-')
+    /* Process help flags first */
+    if (argc > 0 && (strcmp(argv[0], "-h") == 0 || strcmp(argv[0], "--help") == 0)) {
+        printHelp();
+    }
+
+    while (argc > 0 && argv[0][0] == '-')
     {
         switch (argv[0][1])
         {
@@ -284,8 +303,8 @@ int main(int argc, char **argv)
         case 'l':
             pageLen = atoi(argv[0] + 2);
             break;
-        case 'H':
-        case 'h':
+        case 'T':
+        case 't':
             header = argv[0] + 2;
             break;
         case 'X':
@@ -307,6 +326,7 @@ int main(int argc, char **argv)
         --argc, ++argv;
     }
 
+    /* Now, argc holds the count of input files, and argv points to the first input file */
     if (argc == 0)
     {
         fprintf(stderr, "Usage: cref [switches] [input_file]+\n");
@@ -434,7 +454,7 @@ void stopList(register char *filename)
             getSymEntry(buf, 1)->flags |= 4;
 }
 
-void printAll()
+void printAll(void)
 {
     sym_t **ppsym;
     register sym_t *psym;
@@ -452,27 +472,27 @@ void printAll()
     eject();
 }
 
-void eject()
+void eject(void)
 {
     if (row)
         fputc('\f', stdout);
     row = 0;
 }
 
-void printHeading()
+void printHeading(void)
 {
     printf("\n\nCross reference listing: %s", header);
     printf("%*s %3d\n\n\n", (int)(width - strlen(header) - 38), "Page", ++pagenum);
     row = 5;
 }
 
-void checkIfHeading()
+void checkIfHeading(void)
 {
     if (row == 0)
         printHeading();
 }
 
-void newline()
+void newline(void)
 {
     if (row)
     {
@@ -509,11 +529,11 @@ void printXref(register sym_t *sym)
             }
             xSym = sym->xrefs[i].sym;
             if (showSymName)
-                printf("%-*s", maxNameLen + 2, sym->name);
+                printf("%*s", maxNameLen + 2, sym->name);
             else
-                printf("%-*s", maxNameLen + 2, "");
+                printf("%*s", maxNameLen + 2, "");
 
-            printf("%-*s", maxDefNameLen + 2, sym->xrefs[i].sym->name);
+            printf("%*s", maxDefNameLen + 2, sym->xrefs[i].sym->name);
             col = maxDefNameLen + maxNameLen + 4;
             showSymName = false;
         }
@@ -523,7 +543,7 @@ void printXref(register sym_t *sym)
         {
             newline();
             checkIfHeading();
-            printf("%-*s", col = maxDefNameLen + maxNameLen + 4, "");
+            printf("%*s", col = maxDefNameLen + maxNameLen + 4, "");
         }
         printf("%5d%c", line = sym->xrefs[i].line, sym->xrefs[i].flag & 8 ? '#' : ' ');
         col += 6;

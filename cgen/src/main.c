@@ -6,6 +6,17 @@
  * main OK++ PMO
  *
  *********************************************************/
+void printHelp(void) {
+    fprintf(stdout, "Usage: cgen [options] [input_file] \
+");
+    fprintf(stdout, "          [output_file]\n\n");
+    fprintf(stdout, "Options:\n");
+    fprintf(stdout, "  -W, -w     Disable warning messages.\n");
+    fprintf(stdout, "  -R         Enable internal processing option.\n");
+    fprintf(stdout, "  -h, --help Display this help message.\n");
+    exit(EXIT_SUCCESS);
+}
+
 int main(int argc, char **argv)
 {
 
@@ -15,8 +26,14 @@ int main(int argc, char **argv)
     --argc, ++argv;
     while (argc > 0 && **argv == '-')
     { /* Parsing options */
+        if (strcmp(argv[0], "--help") == 0) {
+            printHelp();
+        }
         switch (argv[0][1])
         {
+        case 'h':
+            printHelp();
+            break;
 #if 0
         case 'P':
         case 'p':
@@ -47,6 +64,7 @@ int main(int argc, char **argv)
         }
         argv++, argc--;
     }
+
     if (argc-- > 0)
     {
         if (freopen(*argv, "r", stdin) == NULL) /* Open input file */

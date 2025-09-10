@@ -31,9 +31,7 @@ static void (*recHandler[][2])() = {
 };
 
 static void (*finPassHandler[2])() = {finPass1, finPass2};
-static char usageMsg[] = /* 6c66 */
-    "Usage: link [-cbase][-dsymfile][-r][-n][-s][-x][-z][-oofile][-pspec][-mmap]{-usym}[-wwidth] "
-    "input ...";
+static char usageMsg[] = "Usage: link [options] input ...";
 
 bool haveEntryPt;         /* 7c9e   */
 char *libraryName;        /* 7c9f * */
@@ -67,6 +65,28 @@ bool optN;                /* 7ccb * */
 /**************************************************************************
  31	main		sub_0c6b	ok++ (PMO)
  **************************************************************************/
+void printHelp(void) {
+    fprintf(stdout, "%s\n", usageMsg);
+    fprintf(stdout, "\nOptions:\n");
+    fprintf(stdout, "  -c<base>   Binary output offset.\n");
+    fprintf(stdout, "  -d<symfile>Write symbol file.\n");
+    fprintf(stdout, "  -r         Leave output relocatable.\n");
+    fprintf(stdout, "  -n         Sort symbols by address.\n");
+    fprintf(stdout, "  -s         Strip symbol info.\n");
+    fprintf(stdout, "  -x         Suppress local symbols.\n");
+    fprintf(stdout, "  -z         Suppress trivial symbols.\n");
+    fprintf(stdout, "  -o<ofile>  Specify output file.\n");
+    fprintf(stdout, "  -p<spec>   Psect symbol location.\n");
+    fprintf(stdout, "  -m<mapfile>Write link map.\n");
+    fprintf(stdout, "  -l         Retain absolute reloc.\n");
+    fprintf(stdout, "  -lm        Retain segment reloc.\n");
+    fprintf(stdout, "  -u<sym>    Make symbol undefined.\n");
+    fprintf(stdout, "  -w<width>  Specify map width.\n");
+    fprintf(stdout, "  -i         Ignore undefined symbols.\n");
+    fprintf(stdout, "  -h         Display this help.\n");
+    exit(EXIT_SUCCESS);
+}
+
 int main(int argc, char **argv)
 {
     char *pOption;
@@ -188,7 +208,7 @@ int main(int argc, char **argv)
 
             case 'H':
             case 'h':
-                optH = 1;
+                printHelp();
                 break;
             case 'D':
             case 'd': /* Write a symbol file */
@@ -217,7 +237,7 @@ int main(int argc, char **argv)
                 optI = 1;
                 break;
             default:
-                fatalErr("Illegal flag %c\n%s", *(pOption - 1), usageMsg);
+                printHelp();
                 break;
             } /* end switch */
         } /* end pOption while */
@@ -229,7 +249,7 @@ int main(int argc, char **argv)
         exit(1);
     }
     if (argc == 0)
-        fatalErr(usageMsg);
+        printHelp();
     /* create_symtab();  moved to before option processing as -U uses symbol table */
     if (outFileName == 0)
     { /* Assign default output file name */

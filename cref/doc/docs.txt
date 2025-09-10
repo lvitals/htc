@@ -1,0 +1,55 @@
+CREF Command Documentation
+
+The `cref` command is a cross-reference utility, likely part of the Hi-Tech CP/M Z80 C v3.09 toolchain. It processes input files (presumably containing symbol references) and generates a cross-reference listing.
+
+Usage:
+  cref [options] [input_file]+
+
+Arguments:
+  input_file+  One or more input files to be processed for cross-referencing.
+
+Options:
+  -O <filename> or -o <filename>
+      Specifies the output filename for the cross-reference listing. If not
+      provided, the output is written to standard output (stdout).
+
+  -P <width> or -p <width>
+      Sets the output line width for the generated listing. <width> should be
+      an integer value.
+
+  -L <length> or -l <length>
+      Sets the page length (number of lines per page) for the generated listing.
+      <length> should be an integer value.
+
+  -H <header_text> or -h <header_text>
+      Specifies custom header text to be printed at the top of each page of the
+      cross-reference listing.
+
+  -X <prefix> or -x <prefix>
+      Adds a prefix to a list of prefixes used to exclude symbols from the
+      cross-reference listing. Symbols starting with any of the specified
+      prefixes will be ignored.
+
+  -S <filename> or -s <filename>
+      Specifies a file containing a list of symbols to be excluded from the
+      cross-reference listing. Each symbol in the file should be on a new line.
+
+  -I or -i
+      Includes references from header files (e.g., .h files) in the
+      cross-reference listing. By default, these references might be omitted.
+
+Examples:
+  Generate a cross-reference listing for `myprogram.c`:
+  `cref myprogram.c`
+
+  Generate a listing for `file1.c` and `file2.c` to `output.txt`:
+  `cref -o output.txt file1.c file2.c`
+
+  Generate a listing with a line width of 100 and page length of 60:
+  `cref -P 100 -L 60 myprogram.c`
+
+  Generate a listing with a custom header and exclude symbols starting with 'temp':
+  `cref -H "My Project Xref" -X temp myprogram.c`
+
+  Generate a listing excluding symbols listed in `ignore_list.txt`:
+  `cref -S ignore_list.txt myprogram.c`

@@ -58,13 +58,33 @@ void mainParseLoop(void);
  * basic blocks located differently
  * strcpy 2nd arg optimisation missed
  **************************************************/
+void printHelp(void) {
+    fprintf(stdout, "Usage: p1 [options] [input_file] \n");
+    fprintf(stdout, "          [output_file] [temporary_file]\n\n");
+    fprintf(stdout, "Options:\n");
+    fprintf(stdout, "  -E <file>  Redirect stderr to <file>.\n");
+    fprintf(stdout, "  -S         Enable internal processing option.\n");
+    fprintf(stdout, "  -W         Suppress warning messages.\n");
+    fprintf(stdout, "  -L         Enable another internal option.\n");
+    fprintf(stdout, "  -C <file>  Generate cross-reference file.\n");
+    fprintf(stdout, "             Default .crf extension.\n");
+    fprintf(stdout, "  -h, --help Display this help message.\n");
+    exit(EXIT_SUCCESS);
+}
+
 int main(int argc, char *argv[]) {
     /* char *st; */
 
     initMemAddr(); /* get data area range */
 
     for (--argc, ++argv; argc > 0 && argv[0][0] == '-'; --argc, argv++) {
+        if (strcmp(argv[0], "--help") == 0) {
+            printHelp();
+        }
         switch (argv[0][1]) {
+        case 'h':
+            printHelp();
+            break;
         case 'E':
         case 'e':
             if (!freopen(*argv + 2, "a", stderr)) {
@@ -98,6 +118,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
     }
+
     sub_4d92();
     resetExprStack();
     if (argc > 0) {
