@@ -142,7 +142,7 @@ void *allocMem(size_t size)
 
     do
     {
-        if ((ptr = malloc(size)))
+        if ((ptr = (char *)malloc(size)) != NULL)
             goto done;
     } while (releaseNodeFreeList());
     fatalErr("No room");
