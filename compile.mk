@@ -6,9 +6,9 @@ P1 = ../p1/bin/p1
 CGEN = ../cgen/bin/cgen
 OPTIM = ../optim/bin/optim
 ZAS = ../zas/bin/zas
-LINK = ../link/link
-LIBR = ../libr/libr
-OBJTOHEX = ../objtohex/objtohex
+LINK = ../link/bin/link
+LIBR = ../libr/bin/libr
+OBJTOHEX = ../objtohex/bin/objtohex
 
 # Compilation function for C files
 define compile_c
