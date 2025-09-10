@@ -154,6 +154,7 @@ yydefault:
             yyerror("syntax error");
         yyerrlab:
             ++yynerrs;
+            /* fall through */
         case 1:
         case 2:
             yyerrflag = 3;

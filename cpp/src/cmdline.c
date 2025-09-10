@@ -1,5 +1,6 @@
 #include "cpp.h"
 
+#include <stdio.h>
 #include <dirent.h>
 #include <ctype.h>
 #include <stdarg.h>
