@@ -14,5 +14,4 @@ Inicialização de Arrays Locais: Esta é uma limitação muito significativa. N
 Biblioteca Padrão Incompleta ou com Quirks:
 
 A necessidade de criar uma função my_isupper em vez de usar isupper de <ctype.h> sugere que a biblioteca pode não estar completa ou pode não funcionar como esperado.
-A substituição de fprintf(stderr, ...) por printf(...) indica que o tratamento de fluxos de erro padrão (stderr) pode ser inexistente ou não-padrão.
 Em resumo, o HI-TECH C para o qual o código foi adaptado é uma implementação parcial do padrão C89/C90, com ausências importantes em qualificadores de tipo, tipos de dados e funcionalidades da biblioteca padrão, exigindo que o programador crie soluções alternativas para tarefas comuns.

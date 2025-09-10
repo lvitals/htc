@@ -17,7 +17,7 @@ TARGET_NAME = cgen
 # Defines the project's directory structure for organization.
 SRCDIR   = src
 INCDIR   = include
-BUILDDIR = build
+OBJDIR   = obj
 BINDIR   = bin
 
 # Generates the full path for the final target (e.g., bin/cgen).
@@ -51,7 +51,7 @@ SRCS = $(wildcard $(SRCDIR)/*.c)
 # OBJS: Creates the list of corresponding object files (.o).
 # The 'patsubst' (pattern substitution) function transforms each item in the SRCS list
 # (e.g., src/main.c) into its equivalent in the build directory (e.g., build/main.o).
-OBJS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SRCS))
+OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 
 
 # --- Compilation Rules (Targets) ---
@@ -68,7 +68,7 @@ all: $(TARGET)
 # Uses the $(RM) variable defined at the top.
 clean:
 	@echo "Cleaning the project..."
-	$(RM) $(BUILDDIR) $(BINDIR)
+	$(RM) $(OBJDIR) $(BINDIR)
 
 # 're' is a convenience rule for "rebuild".
 # Executes 'clean' and then 'all'.
@@ -90,7 +90,7 @@ $(TARGET): $(OBJS)
 # Generic Compilation Rule: This is a pattern rule that teaches 'make'
 # how to create a .o file in 'build' from a .c file in 'src'.
 # $< -> Represents the name of the first prerequisite (in this case, the corresponding .c file).
-$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@echo "   Compiling: $<"
-	@mkdir -p $(BUILDDIR)
+	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@

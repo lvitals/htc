@@ -32,15 +32,15 @@ RM = rm -rf
 # --- Names and Directories ---
 TARGET_NAME = dump
 
-SRCDIR   = .
-INCDIR   = include
-BUILDDIR = build
+SRCDIR = .
+INCDIR = include
+OBJDIR = obj
 BINDIR = bin
 
 TARGET = $(BINDIR)/$(TARGET_NAME)
 
 # Temporary directory for intermediate files from compile.mk
-TMP_DIR = $(BUILDDIR)
+TMP_DIR = $(OBJDIR)
 
 # --- Compilation and Linker Flags for Native Build ---
 # CFLAGS for native compilation
@@ -52,7 +52,7 @@ NATIVE_LDFLAGS =
 
 # --- Automatic File List Generation ---
 SRCS = $(wildcard $(SRCDIR)/*.c)
-OBJS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SRCS))
+OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 
 
 # --- Compilation Rules (Targets) ---
@@ -62,13 +62,13 @@ all: $(TARGET)
 
 clean:
 	@echo "Cleaning the project..."
-	$(RM) $(BUILDDIR) $(BINDIR)
+	$(RM) $(OBJDIR) $(BINDIR)
 
 re: clean all
 
 # CP/M target
 CPM_TARGET = $(BINDIR)/DUMP.COM
-CPM_OBJ = $(BUILDDIR)/dump_cpm.obj
+CPM_OBJ = $(OBJDIR)/dump_cpm.obj
 
 cpm: $(CPM_TARGET)
 
@@ -80,7 +80,7 @@ $(CPM_TARGET): $(CPM_OBJ)
 
 $(CPM_OBJ): $(SRCDIR)/dump.c
 	@echo "Compiling for CP/M: $<"
-	@mkdir -p $(BUILDDIR)
+	@mkdir -p $(OBJDIR)
 	$(call compile_c, $<, $@)
 
 
@@ -93,7 +93,7 @@ $(TARGET): $(OBJS)
 	@echo "Native executable compiled successfully! Executable at: $(TARGET)"
 
 # Generic Compilation Rule for native compilation:
-$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@echo "   Compiling native: $<"
-	@mkdir -p $(BUILDDIR)
+	@mkdir -p $(OBJDIR)
 	$(CC) $(NATIVE_CFLAGS) -c $< -o $@
