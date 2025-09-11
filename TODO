@@ -1,17 +1,32 @@
-## O que Falta no Compilador HI-TECH C (com base no seu código)
-Seu código foi adaptado para compilar no HI-TECH C, e os comentários e as próprias adaptações revelam claramente várias limitações e desvios do padrão ANSI C:
 
-Qualificador const não é suportado: Este é um qualificador fundamental em C para criar variáveis somente leitura. A solução adotada foi usar #define, que é uma substituição textual pelo pré-processador e não cria uma variável real com tipo.
+1.  Qualificador const não suportado  
+    Problema: Sem const, não é possível declarar variáveis somente leitura de forma segura.  
+    Impacto: Qualquer otimização baseada em imutabilidade fica impossível. Usar #define é apenas substituição textual, o compilador não reconhece como constante.
+    
+2.  Qualificador volatile não suportado  
+    Problema: Variáveis que mudam fora do controle do programa (hardware, interrupções) podem ser otimizadas incorretamente.  
+    Impacto: Código embarcado pode se comportar de forma errática, pois o compilador assume que o valor da variável não muda sozinho.  
+    Workaround: Evitar otimizações agressivas e usar flags de controle manual.
+    
+3.  Tipo long double não suportado  
+    Problema: Sem ponto flutuante de precisão estendida, fica limitado a float e double.  
+    Impacto: Aplicações que requerem cálculos de alta precisão podem apresentar erros acumulados maiores.
+    
+4.  Macros pré-definidas ausentes (**DATE**, **TIME**)  
+    Problema: Não é possível registrar automaticamente a data e hora da compilação.  
+    Impacto: Ferramentas de build ou logs de versão precisam de soluções alternativas, como gerar #define BUILD\_DATE por script.
+    
+5.  Inicialização de arrays locais  
+    Problema: Arrays locais só podem ser inicializados se declarados como static.  
+    Impacto: Arrays inicializados passam a ser alocados em memória estática em vez da pilha, consumindo RAM fixa.
+    
+6.  Biblioteca padrão incompleta  
+    Problema: Funções básicas como isupper e isdigit podem não existir ou funcionar de forma limitada.  
+    Impacto: É necessário escrever funções próprias (my\_isupper, my\_isdigit), aumentando o volume de código e a manutenção.
+    
 
-Qualificador volatile não é suportado: volatile é crucial em sistemas embarcados (o foco do HI-TECH C) para informar ao compilador que uma variável pode ser alterada por fatores externos (hardware, interrupções). A ausência desse recurso pode levar a bugs de otimização difíceis de encontrar.
-
-Tipo long double não é suportado: O compilador não oferece suporte para o tipo de ponto flutuante de precisão estendida.
-
-Macros Predefinidas Ausentes: As macros __DATE__ e __TIME__, que são padrão para registrar a data e a hora da compilação, não estão disponíveis.
-
-Inicialização de Arrays Locais: Esta é uma limitação muito significativa. No padrão ANSI C, você pode inicializar um array local na sua declaração (ex: int nums[] = {1, 2, 3};). O seu código indica que, no HI-TECH C, isso só é possível se o array for declarado como static. Isso força o array a ser alocado em uma área de memória de dados estática em vez da pilha.
-
-Biblioteca Padrão Incompleta ou com Quirks:
-
-A necessidade de criar uma função my_isupper em vez de usar isupper de <ctype.h> sugere que a biblioteca pode não estar completa ou pode não funcionar como esperado.
-Em resumo, o HI-TECH C para o qual o código foi adaptado é uma implementação parcial do padrão C89/C90, com ausências importantes em qualificadores de tipo, tipos de dados e funcionalidades da biblioteca padrão, exigindo que o programador crie soluções alternativas para tarefas comuns.
+Conclusão  
+O HI-TECH C é uma implementação parcial de C89/C90 voltada para microcontroladores.  
+Faltam qualificadores importantes (const, volatile), tipos de dados avançados (long double ausente) e a biblioteca padrão é limitada.  
+Além disso, a inicialização de arrays locais é restrita.  
+Essas limitações exigem soluções alternativas menos elegantes por parte do programador.
